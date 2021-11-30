@@ -2,10 +2,6 @@ import snscrape.modules.twitter as sntwitter
 import pandas as pd
 from matplotlib import pyplot as plt
 
-# hello this is a test
-a = 1
-print(a)
-
 
 def buy_when_tweet(tickers, user, k, df):
     # Creating list to append tweet data to
