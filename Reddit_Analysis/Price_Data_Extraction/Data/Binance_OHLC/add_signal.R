@@ -1,9 +1,9 @@
-add_signal <- function(prices, signal){
-  #signal should be a named list 
+library(dplyr)
+
+add_signal <- function(prices, signals, i){
+  #signals should be a named list 
   
-  for (sign in names(signal)){
-    prices$sign <- signal[[sign]]
-  }
-  
-  return(list('prices_with_signal'=prices))
+  prices <- cbind(prices, signals[[i]])
+  colnames(prices)[length(colnames(prices))] <- names(signals)[i]
+  return(prices)
 }

@@ -13,7 +13,7 @@ create_signal <- function(post_times, prices, gap){
   signal <- with(post_times, signal)
   signal[is.na(signal)] <- 0
 
-  return(list('signal'=signal))
+  return(signal)
 }
 
 
