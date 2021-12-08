@@ -715,12 +715,20 @@ In machine learning, it is extremely helpful to have a single number to judge a 
 For the remaining part, the dataset we used to train the model is still the Kyber Network trading data. But it's 1 hour trading data instead of 1 day. And we only kept two features: \code{Date} and \code{close}(log of close price of an hour). Please see section(\ref{sec:medium}) for the implement details.
 
 \subsection{LSTM}
-In this section, we try a method called LSTM in machine learning. Long short-term memory (LSTM) is an artificial recurrent neural network (RNN) architecture used in the field of deep learning. Unlike standard feedforward neural networks, LSTM has feedback connections. It can process not only single data points (such as images), but also entire sequences of data (such as speech or video). For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, speech recognition and anomaly detection in network traffic or IDSs (intrusion detection systems).
+Long short-term memory, abbreviated to LSTM, is an artificial recurrent neural network (RNN) architecture used in the field of deep learning. Unlike standard feedforward neural networks, LSTM has feedback connections. It can process not only single data points (such as images), but also entire sequences of data (such as speech or video). For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, speech recognition and anomaly detection in network traffic or IDSs (intrusion detection systems).
 
 A common LSTM unit is composed of a cell, an input gate, an output gate and a forget gate. The cell remembers values over arbitrary time intervals and the three gates regulate the flow of information into and out of the cell.
 
-LSTM networks are well-suited to classifying, processing and making predictions based on time series data, since there can be lags of unknown duration between important events in a time series. LSTMs were developed to deal with the vanishing gradient problem that can be encountered when training traditional RNNs. Relative insensitivity to gap length is an advantage of LSTM over RNNs, hidden Markov models and other sequence learning methods in numerous applications. The formula is given as below:
+LSTM networks are well-suited to classifying, processing and making predictions based on time series data, since there can be lags of unknown duration between important events in a time series. LSTMs were developed to deal with the vanishing gradient problem that can be encountered when training traditional RNNs. Relative insensitivity to gap length is an advantage of LSTM over RNNs, hidden Markov models and other sequence learning methods in numerous applications. See Figure \ref{fig:LSTM} for a schematic.
 
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[scale = 0.4]{Images/LSTM.png}
+    \caption{The procedure of LSTM}
+    \label{fig:LSTM}
+\end{figure}
+
+In accordance with the figure, and the literature, let us define some notation
 $$
 \begin{aligned}
 &x_{t} \in \mathbb{R}^{d}: \text { input vector to the LSTM unit } \\
@@ -737,7 +745,7 @@ $$
 \end{aligned}
 $$
 
-where the superscripts $d$ and $h$ refer to the number of input features and number of hidden units, respectively.
+where the superscripts $d$ and $h$ refer to the number of input features and number of hidden units, respectively. Then, we have that
 
 $$
 \begin{aligned}
@@ -750,10 +758,33 @@ h_{t} &=o_{t} \circ \sigma_{h}\left(c_{t}\right)
 \end{aligned}
 $$
 
-where the initial values are  $c_{0}=0$  and $h_{0}=0$  and the operator o denotes the Hadamard product (element-wise product. The subscript  t indexes the time step. 
+where the initial values are  $c_{0}=0$  and $h_{0}=0$  and the operator o denotes the Hadamard product (element-wise) product. The subscript  t indexes the time step. 
 
 \subsubsection{Strategy and backtesting}
-In this part, we describe the strategy we use to increase the profit via LSTM model. At first, we gather the 1 hour data from 
+In this part, we describe the strategy we use to increase the profit via LSTM model. At first, we split the one hour trading data into two parts. The first 80 percent of data is used as training dataset, while the rest 20 percent data are used as testing test. For a certain data, we use the previous 60 data as input and that certain data as output. Then we use LSTM with 60 units and some tuned hyperparameters to train the model.
+
+After obtaining the model we train, we do the same processing for the testing data and do the prediction. The RMSE is 0.05609679960361257, which is quite low. See Figure \ref{fig:LSTM price} for the model predictions.
+
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[scale = 0.5]{Images/LSTM price.png}
+    \caption{Price of LSTM prediction and the ground truth. It can be seen that our prediction has less volatility than the Ground Truth}
+    \label{fig:LSTM price}
+\end{figure}
+
+
+
+
+When is predicting is over, it's time to develop a strategy. The strategy is direct and simple: if we predict that price at next hour is higher, then we buy the KNC. If our model predict that the price at next hour is lower, then we sell the price right now.
+Figure \ref{fig:LSTM PNL} for the relaisation of our backtesting. It can be seen clearly that our strategy works nicely and outperform the baseline (do nothing). 
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[scale = 0.7]{Images/LSTM PNL.png}
+    \caption{PNL evolution of our strategy and baseline. It can be seen that at beginning , our strategy perform worse than the baseline. However, our strategy performs much better during the oscillation of the KNC price}
+    \label{fig:LSTM PNL}
+\end{figure}
+
 
 
 
