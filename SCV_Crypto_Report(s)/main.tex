@@ -698,6 +698,73 @@ To conclude, we calculate from $1000$ samples the bootstrapped $95\%$ confidence
 This analysis is of course limited. For example, we didn't consider the content of the posts, and we performed the analysis of a relatively short time frame. But this is analysis is intended to be informative. Going further, we would aim to continue this analysis for various authors and various (longer) time frames to build a much more comprehensive strategy which encompasses all the information we glean from that analysis, nevertheless, what we observe here is promising, and certainly supports the use of network modelling to identify important members of communities. Moreover, in an even more precise analysis, it would serve to organise posts by words mentioned in them, then we can make decisions based on the content of posts and not their existence alone.
 
 
+\chapter{Other Methods}
+\section{Machine Learning}
+Machine learning (ML) is a type of artificial intelligence (AI) that build models to become more accurate at predicting outcomes without being explicitly programmed to do so. Machine learning algorithms use historical data as input to predict new output values. Recently, machine learning performs nicely in various predication tasks in various areas. One simple idea is to use techniques in machine learning to predict the price of cryptocurrency and earn extra money from it.
+
+\subsection{Evaluation}
+Before we dive into the details of implementation, we need a value to evaluate the performance of our models. Here we use Root Mean Square Error (RMSE) to estimate our result. The formula of it is given below
+\begin{equation}
+R M S E=\sqrt{\frac{\sum_{i=1}^{N}\|y(i)-\hat{y}(i)\|^{2}}{N}},
+\end{equation}
+
+where $N$ is the number of data points, $y(i)$ is the i-th measurement, and $\hat{y}(i)$ is its corresponding prediction.\\
+
+In machine learning, it is extremely helpful to have a single number to judge a model’s performance, whether it be during training, cross-validation, or monitoring after deployment. Root mean square error is one of the most widely used measures for this. It is a proper scoring rule that is intuitive to understand and compatible with some of the most common statistical assumptions. The idea behind this formula is that we want to minimize the difference between our prediction and the ground truth. 
+
+For the remaining part, the dataset we used to train the model is still the Kyber Network trading data. But it's 1 hour trading data instead of 1 day. And we only kept two features: \code{Date} and \code{close}(log of close price of an hour). Please see section(\ref{sec:medium}) for the implement details.
+
+\subsection{LSTM}
+In this section, we try a method called LSTM in machine learning. Long short-term memory (LSTM) is an artificial recurrent neural network (RNN) architecture used in the field of deep learning. Unlike standard feedforward neural networks, LSTM has feedback connections. It can process not only single data points (such as images), but also entire sequences of data (such as speech or video). For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, speech recognition and anomaly detection in network traffic or IDSs (intrusion detection systems).
+
+A common LSTM unit is composed of a cell, an input gate, an output gate and a forget gate. The cell remembers values over arbitrary time intervals and the three gates regulate the flow of information into and out of the cell.
+
+LSTM networks are well-suited to classifying, processing and making predictions based on time series data, since there can be lags of unknown duration between important events in a time series. LSTMs were developed to deal with the vanishing gradient problem that can be encountered when training traditional RNNs. Relative insensitivity to gap length is an advantage of LSTM over RNNs, hidden Markov models and other sequence learning methods in numerous applications. The formula is given as below:
+
+$$
+\begin{aligned}
+&x_{t} \in \mathbb{R}^{d}: \text { input vector to the LSTM unit } \\
+&f_{t} \in(0,1)^{h}: \text { forget gate's activation vector } \\
+&i_{t} \in(0,1)^{h}: \text { input/update gate's activation vector } \\
+&o_{t} \in(0,1)^{h}: \text { output gate's activation vector } \\
+&h_{t} \in(-1,1)^{h}: \text { hidden state vector also known as output vector of the LSTM unit } \\
+&\tilde{c}_{t} \in(-1,1)^{h}: \text { cell input activation vector } \\
+&c_{t} \in \mathbb{R}^{h}: \text { cell state vector } \\
+&W \in \mathbb{R}^{h \times d}, U \in \mathbb{R}^{h \times h} \text { and } b \in \mathbb{R}^{h}: \text { weight matrices and bias vector parameters which need to be learned during training }\\
+&\sigma_{g} :\text{ sigmoid function}\\
+&\sigma_{c} :\text{ hyperbolic tangent function}\\
+&\sigma_{h} :\text{ hyperbolic tangent function or  $\sigma_{h}(x)=x$.}
+\end{aligned}
+$$
+
+where the superscripts $d$ and $h$ refer to the number of input features and number of hidden units, respectively.
+
+$$
+\begin{aligned}
+f_{t} &=\sigma_{g}\left(W_{f} x_{t}+U_{f} h_{t-1}+b_{f}\right) \\
+i_{t} &=\sigma_{g}\left(W_{i} x_{t}+U_{i} h_{t-1}+b_{i}\right) \\
+o_{t} &=\sigma_{g}\left(W_{o} x_{t}+U_{o} h_{t-1}+b_{o}\right) \\
+\tilde{c}_{t} &=\sigma_{c}\left(W_{c} x_{t}+U_{c} h_{t-1}+b_{c}\right) \\
+c_{t} &=f_{t} \circ c_{t-1}+i_{t} \circ \tilde{c}_{t} \\
+h_{t} &=o_{t} \circ \sigma_{h}\left(c_{t}\right)
+\end{aligned}
+$$
+
+where the initial values are  $c_{0}=0$  and $h_{0}=0$  and the operator o denotes the Hadamard product (element-wise product. The subscript  t indexes the time step. 
+
+\subsubsection{Backtesting}
+Here, we use 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
