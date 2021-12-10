@@ -724,19 +724,22 @@ Before proceeding in answering this question, we must ensure that the data we us
 where $P_t$ is the close price at time $t$ of a given quantity. This transformation does not mask our interpretation of the results since, by a standard first order Taylor approximation \[
 100\log\left(\frac{P_t}{P_{t-1}}\right) = 100\log\left(1 + \frac{P_t - P_{t-1}}{P_{t-1}}\right) \approx 100 \times \frac{P_t - P_{t-1}}{P_{t-1}},
 \]
-which is just a percentage return. 
+which is just a percentage return.
 
+Obtaining the price data as described in the introduction, and using the \code{acf} function (see Figure \ref{fig:acf_btc_eth} in base R and \code{adf.test} function in the R package \code{tseries}, we are able to convince ourselves that the Bitcoin and Ethereum series are stationary. Indeed, for both series, the \code{adf.test} function, which performs the Augmented Dickey-Fuller Test whose null hypothesis says the series is non-stationary [ref] -- we obtained $p$-values less than $1\%$, and so reject this null hypothesis. 
 
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Causality_between_time_series/acf_btc_eth.png}
+    \caption{Autocorrelation of the Bitcoin and Ethereum time series data respectively after a log differencing transformation. We see that it drops to zero quickly, a good indicator of stationarity.}
+    \label{fig:acf_btc_eth}
+\end{figure}
 
-{\color{red}TO ADD:
-\begin{itemize}
-    \item Explanation of the test and the intuition behind it
-    \item Test assumptions
-    \item Show data (after transformation) satisfies these assumptions
-    \item Discuss results - note the difference in significance when we switch the causality. 
-\end{itemize}
-}
-\begin{table}[ht]
+Having met the conditions necessary to proceed with the Granger causality test, we now employ the \code{lmtest} function in package in R containing the \code{grangertest} test function which takes the two main arguments \code{formula} and \code{order}. The former is written in the form \code{x} $\sim$ \code{y} to mean that we are test if series \code{x} Granger causes series \code{y}, and the latter specifies the size of the lag to to use. In our study, we can conveniently interpret the number of lags as the number of hours in \code{x}'s past we use to predict \code{y}, combined with \code{y}'s past. Tables \ref{tab:btc_cause_eth} and \ref{tab:eth_cause_btc} show the results, where in the former we test if Bitcoin helps in predicting Ethereum and in the latter, the reverse. We test both directions because otherwise our conclusion would be biased. 
+
+To conclude, the results verify our intuition. Indeed, Bitcoin prices Granger-cause Ethereum prices, but \textbf{not vice-versa}. This assigns a certain degree of influence to Bitcoin price fluctuations over the prices of smaller, less traded, and less valued cryptocurrencies. While we acknowledge the Granger causality test is limited by an oversight of hidden interrelationships between other variables and the ones in consideration, given one's own experience with the markets, the conclusion remains informative.    
+
+\begin{table}[!htbp]
 \centering
 \begin{tabular}{rrrrrr}
   \hline
@@ -747,7 +750,7 @@ which is just a percentage return.
 \caption{Granger causality test scores for predicting ethereum returns with Bitcoin returns} \label{tab:btc_cause_eth}
 \end{table}
 
-\begin{table}[ht]
+\begin{table}[!htbp]
 \centering
 \begin{tabular}{rrrrrr}
   \hline
