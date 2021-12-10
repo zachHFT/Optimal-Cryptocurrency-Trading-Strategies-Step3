@@ -113,11 +113,11 @@ bodyfont=\fontfamily{cmss}\selectfont\itshape,
 
 
 
-\newcommand{\reporttitle}{##}
-\newcommand{\reportauthor}{Kai Cooper\\Yacine Trad\\Yehao Liu\\ ZachHFT}
-\newcommand{\reportsecondauthor}{}
-\newcommand{\reportthirdauthor}{}
-\newcommand{\reportfourthauthor}{}
+\newcommand{\reporttitle}{}
+\newcommand{\reportauthor}{Kai Cooper}
+\newcommand{\reportsecondauthor}{Yehao Liu}
+\newcommand{\reportthirdauthor}{Yacine Trad}
+\newcommand{\reportfourthauthor}{ZachHFT}
 \newcommand{\reportfifthauthor}{}
 \newcommand{\supervisor}{Dr. Mehdi Gholam \\ Celia Garcia Pareja}
 
@@ -132,6 +132,7 @@ bodyfont=\fontfamily{cmss}\selectfont\itshape,
 
 \definecolor{fcolor}{RGB}{0,255,255}
 
+
 \usepackage[numbers]{natbib}
 
 \begin{document}
@@ -139,7 +140,6 @@ bodyfont=\fontfamily{cmss}\selectfont\itshape,
 \input{SCV_Crypto_Report(s)/titlepage}
 \fontfamily{cmss}\selectfont
 \tableofcontents
-
 
 
 
@@ -702,7 +702,32 @@ This analysis is of course limited. For example, we didn't consider the content 
 
 \chapter{Prediction Based Methods}
 \section{Causality between time series}
+Bitcoin is the most popular and most traded cryptocurrency on the market right now [ref]. We have seen that, both superficially and subjectively, whenever Bitcoin prices against the US dollar drop (or spike) suddenly, that other cryptocurrencies tend to follow in suit. For the purposes of trading on the market, the word 'follow' is important here -- can we make decisions in buy-sell strategies of other cryptocurrencies using knowledge of Bitcoin's price trajectory in the very recent past? 
+
+However, we must first assess whether there is any credibility to our superficial observation. To this end, we will discuss \textbf{Granger causality} and its eponymous statistical hypothesis test. A result which corroborates our initial observation would strongly inform a trading strategy which is based on Bitcoin's influence on other coins. 
 \subsection{Granger Causality}
+The intuition behind Granger causality is simple. Granger causality is related to the following question: if $X$ and $Y$ are variables which evolve in time, does including $X$'s past in prediction of the future of $Y$ give more likely results than not including $X$ at all? In particular, let $y$ and $x$ be \textbf{stationary} time series. To test the null hypothesis that $x$ does not Granger-cause $y$, one first finds the proper lagged values of $y$ to include in an univariate autoregression of $y$:
+\[y_t = a_0 + a_1y_{t-1} + a_2y_{t-2} + \cdots + a_my_{t-m} + \text{error}_t\]
+Next, the autoregression is augmented by including lagged values of $x$:
+\[y_t = a_0 + a_1y_{t-1} + a_2y_{t-2} + \cdots + a_my_{t-m} + b_px_{t-p} + \cdots + b_qx_{t-q} + \text{error}_t.\]
+
+Now, via a statistical $F$-test, one tests the individual significance of each of the coefficients $b_i$ in the above regression statement. In the notation of the above augmented regression, $p$ and $q$ are the shortest and longest lag length respectively for which the lagged value of $x$ is significant. We say $x$ \textbf{Granger causes} $y$ upon rejection of the hypothesis \[
+H_0: b_p = \cdots = b_q = 0. 
+\]
+In other words, if the series $y$ is better explained by including values from series $x$, then we conclude $x$ Granger causes $y$. 
+In general, Granger causality has some limitations, in that does not provide any insight on the relationship between the variable hence it is not true causality unlike \textit{cause and effect} analysis. What is more, Granger causality fails to forecast when there is an interdependency between two or more variables, and Granger causality test must be performed on stationary data [ref ].
+
+\subsubsection{Do Bitcoin prices Granger cause Ethereum prices?}
+Before proceeding in answering this question, we must ensure that the data we use meet the requirements of the Granger causality test, in that the data are stationary. As we discussion in the introduction, data extracted from online exchanges gives absolute prices of a currency at a given time, and like traditional financial time series, this is famously non-stationary. To overcome this, we make the log return transformation \[
+\log\left(\frac{P_t}{P_{t-1}}\right) 
+\]
+where $P_t$ is the close price at time $t$ of a given quantity. This transformation does not mask our interpretation of the results since, by a standard first order Taylor approximation \[
+100\log\left(\frac{P_t}{P_{t-1}}\right) = 100\log\left(1 + \frac{P_t - P_{t-1}}{P_{t-1}}\right) \approx 100 \times \frac{P_t - P_{t-1}}{P_{t-1}},
+\]
+which is just a percentage return. 
+
+
+
 {\color{red}TO ADD:
 \begin{itemize}
     \item Explanation of the test and the intuition behind it
@@ -733,6 +758,9 @@ This analysis is of course limited. For example, we didn't consider the content 
 \caption{Granger causality test scores for predicting Bitcoin returns with ethereum returns} \label{tab:eth_cause_btc}
 \end{table}
 
+\subsection{Strategy based on Bitcoin influence}
+
+...
 
 \section{Machine Learning}
 Machine learning (ML) is a type of artificial intelligence (AI) that build models to become more accurate at predicting outcomes without being explicitly programmed to do so. Machine learning algorithms use historical data as input to predict new output values. Recently, machine learning performs nicely in various predication tasks in various areas. One simple idea is to use techniques in machine learning to predict the price of cryptocurrency and earn extra money from it.
@@ -746,12 +774,16 @@ Before we dive into the details of implementation, we need to define a way of gi
 
 where $N$ is the number of data points, $y(i)$ is the i-th measurement of actual data, and $\hat{y}(i)$ is its corresponding prediction.\\
 
-In machine learning, it is extremely helpful to have a single number to judge a model’s performance, whether it be during training, cross-validation, or monitoring after deployment. Root mean square error is one of the most widely used measures for this. It is a proper scoring rule that is intuitive to understand and compatible with some of the most common statistical assumptions. This statistic measures the Euclidean distance between our prediction and our model, the aim is to get this figure as low as possible, offering an analogy to correctness.  
+In machine learning, it is extremely helpful to have a single number to judge a model’s performance, whether it be during training, cross-validation, or monitoring after deployment. Root mean square error is one of the most widely used measures for this. It is a proper scoring rule that is intuitive to understand and compatible with some of the most common statistical assumptions. \cite{hyndman2006another} This statistic measures the Euclidean distance between our prediction and our model, the aim is to get this figure as low as possible, offering an analogy to correctness.  
 
-For the remaining part, the data set we used to train the model is the Kyber Network trading data. but here the data is more granular, here we use 1 hour trading data in lieu of 1 day data. Moreover, we keep only two features: \code{Date} and \code{close} (log of close price in an hour). Please see section (\ref{sec:medium}) for the implementation details.
+For the remaining part, the data set we used to train the model is the Kyber Network trading data. but here the data is more granular, here we use 1 hour trading data in lieu of 1 day data to train the model and test the accuracy of our model. Moreover, we keep only two features: \code{Date} and \code{close} (log of close price in an hour). Please see section (\ref{sec:medium}) for the implementation details.
 
 \subsection{LSTM}
-Long short-term memory, abbreviated to LSTM, is an artificial recurrent neural network (RNN) architecture used in the field of deep learning. Unlike standard feedforward neural networks, LSTM has feedback connections. It can process not only single data points (such as images), but also entire sequences of data (such as speech or video). For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, speech recognition and anomaly detection in network traffic or IDSs (intrusion detection systems).
+
+A simple understanding is to think of this model as human brain. A human receive millions of information everyday, but most of these information are forgot shortly. These memory are called short term memory. On the other hand, there are still some important knowledge we keep in mind for a long time, which are known as long term memory. Inspired by this idea, LSTM is a neural network that throw away "less important" data and memorize "more important" data. The following paragraphs show the exact definition and implementation of LSTM model.
+
+Long short-term memory, abbreviated to LSTM, is an artificial recurrent neural network (RNN) architecture used in the field of deep learning. Unlike standard feedforward neural networks, LSTM has feedback connections. It can process not only single data points (such as images), but also entire sequences of data (such as speech or video). For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, speech recognition and anomaly detection in network traffic or IDSs (intrusion detection systems).\cite{greff2016lstm}
+
 
 A common LSTM unit is composed of a cell, an input gate, an output gate and a forget gate. The cell remembers values over arbitrary time intervals and the three gates regulate the flow of information into and out of the cell.
 
@@ -760,7 +792,7 @@ LSTM networks are well-suited to classifying, processing and making predictions 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[scale = 0.4]{Images/LSTM.png}
-    \caption{The procedure of LSTM}
+    \caption{The procedure of LSTM. We update $h_t$ and $c_t$ at each iteration.}
     \label{fig:LSTM}
 \end{figure}
 
@@ -799,13 +831,13 @@ where the initial values are  $c_{0}=0$  and $h_{0}=0$  and the operator o denot
 \subsubsection{Strategy and backtesting}
 In this part, we describe the strategy we use to increase the profit via LSTM model. At first, we split the one hour trading data into two parts. The first 80 percent of data is used as training dataset, while the rest 20 percent data are used as testing test. For a certain data, we use the previous 60 data as input and that certain data as output. Then we use LSTM with 60 units and some tuned hyperparameters to train the model.
 
-After obtaining the model we train, we do the same processing for the testing data and do the prediction. The RMSE is 0.05609679960361257, which is quite low. See Figure \ref{fig:LSTM price} for the model predictions.
+After obtaining the model we train, we do the same processing for the testing data and do the prediction. The RMSE is 0.056, which is quite low. See Figure \ref{fig:LSTM price} for the model predictions.
 
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[scale = 0.5]{Images/LSTM price.png}
-    \caption{Price of LSTM prediction and the ground truth. It can be seen that our prediction has less volatility than the Ground Truth}
+    \caption{Price of LSTM prediction and the ground truth. It can be seen that our prediction has similar trend to the Ground Truth but not changing that drastically}
     \label{fig:LSTM price}
 \end{figure}
 
@@ -813,11 +845,11 @@ After obtaining the model we train, we do the same processing for the testing da
 
 
 When is predicting is over, it's time to develop a strategy. The strategy is direct and simple: if we predict that price at next hour is higher, then we buy the KNC. If our model predict that the price at next hour is lower, then we sell the price right now.
-Figure \ref{fig:LSTM PNL} for the relaisation of our backtesting. It can be seen clearly that our strategy works nicely and outperform the baseline (do nothing). 
+Figure \ref{fig:LSTM PNL} for the relaisation of our backtesting. It can be seen that our strategy works nicely and outperform the baseline in the long run in our testing set. 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[scale = 0.7]{Images/LSTM PNL.png}
-    \caption{PNL evolution of our strategy and baseline. It can be seen that at beginning , our strategy perform worse than the baseline. However, our strategy performs much better during the oscillation of the KNC price}
+    \caption{PNL evolution of our strategy and baseline. It can be seen that at beginning , our strategy perform worse than the baseline. However, our strategy performs much better during the oscillation of the KNC price. }
     \label{fig:LSTM PNL}
 \end{figure}
 
@@ -868,6 +900,7 @@ Figure \ref{fig:LSTM PNL} for the relaisation of our backtesting. It can be seen
 \caption{(a) Author projection of bipartite graph $G$. (b) Subreddit projection of bipartite graph $G$. (c) $G$ shown clearly with its bipartite structure. The central blue node in (b) and (c) is the r/CryptoCurrency subreddit.}
 \label{fig:bipartite}
 \end{figure}
+
 
 \bibliography{references}
 \end{spacing}
