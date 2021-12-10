@@ -697,22 +697,58 @@ To conclude, we calculate from $1000$ samples the bootstrapped $95\%$ confidence
 
 This analysis is of course limited. For example, we didn't consider the content of the posts, and we performed the analysis of a relatively short time frame. But this is analysis is intended to be informative. Going further, we would aim to continue this analysis for various authors and various (longer) time frames to build a much more comprehensive strategy which encompasses all the information we glean from that analysis, nevertheless, what we observe here is promising, and certainly supports the use of network modelling to identify important members of communities. Moreover, in an even more precise analysis, it would serve to organise posts by words mentioned in them, then we can make decisions based on the content of posts and not their existence alone.
 
+{\color{red} TO ADD: some form of discussion }
 
-\chapter{Other Methods}
+
+\chapter{Prediction Based Methods}
+\section{Causality between time series}
+\subsection{Granger Causality}
+{\color{red}TO ADD:
+\begin{itemize}
+    \item Explanation of the test and the intuition behind it
+    \item Test assumptions
+    \item Show data (after transformation) satisfies these assumptions
+    \item Discuss results - note the difference in significance when we switch the causality. 
+\end{itemize}
+}
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+ Lag & 1 & 2 & 3 & 4 & 5 \\ 
+  $p$-value & 0.049 & 0.017 & 0.014 & 0.030 & 0.033 \\ 
+   \hline
+\end{tabular}
+\caption{Granger causality test scores for predicting ethereum returns with Bitcoin returns} \label{tab:btc_cause_eth}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+ Lag & 1 & 2 & 3 & 4 & 5 \\ 
+  $p$-value & 0.081 & 0.196 & 0.207 & 0.189 & 0.276 \\ 
+   \hline
+\end{tabular}
+\caption{Granger causality test scores for predicting Bitcoin returns with ethereum returns} \label{tab:eth_cause_btc}
+\end{table}
+
+
 \section{Machine Learning}
 Machine learning (ML) is a type of artificial intelligence (AI) that build models to become more accurate at predicting outcomes without being explicitly programmed to do so. Machine learning algorithms use historical data as input to predict new output values. Recently, machine learning performs nicely in various predication tasks in various areas. One simple idea is to use techniques in machine learning to predict the price of cryptocurrency and earn extra money from it.
 
 \subsection{Evaluation}
-Before we dive into the details of implementation, we need a value to evaluate the performance of our models. Here we use Root Mean Square Error (RMSE) to estimate our result. The formula of it is given below
-\begin{equation}
-R M S E=\sqrt{\frac{\sum_{i=1}^{N}\|y(i)-\hat{y}(i)\|^{2}}{N}},
-\end{equation}
+Before we dive into the details of implementation, we need to define a way of giving a numerical score to the the performance of our models. We will use the Root Mean Square Error (RMSE) statistic
 
-where $N$ is the number of data points, $y(i)$ is the i-th measurement, and $\hat{y}(i)$ is its corresponding prediction.\\
+\[
+\textrm{RMSE} =\sqrt{\frac{\sum_{i=1}^{N}\|y(i)-\hat{y}(i)\|^{2}}{N}},
+\]
 
-In machine learning, it is extremely helpful to have a single number to judge a model’s performance, whether it be during training, cross-validation, or monitoring after deployment. Root mean square error is one of the most widely used measures for this. It is a proper scoring rule that is intuitive to understand and compatible with some of the most common statistical assumptions. The idea behind this formula is that we want to minimize the difference between our prediction and the ground truth. 
+where $N$ is the number of data points, $y(i)$ is the i-th measurement of actual data, and $\hat{y}(i)$ is its corresponding prediction.\\
 
-For the remaining part, the dataset we used to train the model is still the Kyber Network trading data. But it's 1 hour trading data instead of 1 day. And we only kept two features: \code{Date} and \code{close}(log of close price of an hour). Please see section(\ref{sec:medium}) for the implement details.
+In machine learning, it is extremely helpful to have a single number to judge a model’s performance, whether it be during training, cross-validation, or monitoring after deployment. Root mean square error is one of the most widely used measures for this. It is a proper scoring rule that is intuitive to understand and compatible with some of the most common statistical assumptions. This statistic measures the Euclidean distance between our prediction and our model, the aim is to get this figure as low as possible, offering an analogy to correctness.  
+
+For the remaining part, the data set we used to train the model is the Kyber Network trading data. but here the data is more granular, here we use 1 hour trading data in lieu of 1 day data. Moreover, we keep only two features: \code{Date} and \code{close} (log of close price in an hour). Please see section (\ref{sec:medium}) for the implementation details.
 
 \subsection{LSTM}
 Long short-term memory, abbreviated to LSTM, is an artificial recurrent neural network (RNN) architecture used in the field of deep learning. Unlike standard feedforward neural networks, LSTM has feedback connections. It can process not only single data points (such as images), but also entire sequences of data (such as speech or video). For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, speech recognition and anomaly detection in network traffic or IDSs (intrusion detection systems).
