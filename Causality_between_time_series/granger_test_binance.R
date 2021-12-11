@@ -24,6 +24,13 @@ names(dfdata.logreturn) <- names
 logreturn.hourly <- data.frame(btc = dfdata.logreturn$`BTCUSDT-1h`$logreturn,
                                eth = dfdata.logreturn$`ETHUSDT-1h`$logreturn)
 
+par(mfrow=c(1,2))
+acf(logreturn.hourly$btc, main="ACF for hourly Bitcoin")
+acf(logreturn.hourly$eth, main="ACF for hourly Ethereum")
+
+aTSA:::adf.test(logreturn.hourly$btc)
+aTSA:::adf.test(logreturn.hourly$eth)
+
 grangertest(btc ~ eth, order = 1, data=logreturn.hourly)
 grangertest(eth ~ btc, order = 5, data=logreturn.hourly)
 
