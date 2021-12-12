@@ -1,6 +1,7 @@
-g\documentclass[twoside]{report}
+\documentclass[twoside]{report}
 \usepackage[utf8]{inputenc}
-%\usepackage[english]{babel}
+\usepackage[english]{babel}
+\usepackage[numbers]{natbib}
 \usepackage{amsthm}
 \usepackage{tkz-fct} 
 \usepackage{thmtools}
@@ -133,7 +134,7 @@ bodyfont=\fontfamily{cmss}\selectfont\itshape,
 \definecolor{fcolor}{RGB}{0,255,255}
 
 
-\usepackage[numbers]{natbib}
+
 
 \begin{document}
 \begin{spacing}{1}
@@ -206,26 +207,24 @@ It is important to note that sometimes the dataset obtained via the extraction i
 \end{figure}
 
 
-Going further, once an analysis is performed on a dedicated dataset (e.g. 1 hour BTC/USDT historical data), the same statistical analysis can be performed over any dataset (e.g. 1 minute ETH/CHF historical data), since the data structure (i.e. the columns, open, high, low, close) is the same. We shall do so later on in the project.
+Going further, once an analysis is performed on a dedicated dataset (e.g. 1 hour BTC/USDT historical data), the same statistical analysis can be performed over any dataset (e.g. 1 minute ETH/CHF historical data), since the data structure (i.e. the columns, open, high, low, close) is the same.
 
 
 
 \subsection{Data transformation}
 
-The goal of this project is to proceed to the analysis of an optimal trading (buy-and-sell) strategy for the market of Cryptocurrencies. Our analysis will be made on cryptocurrency pairs.\\
+The goal of this project is to proceed to the analysis of an optimal trading (buy-and-sell) strategy for the market of Cryptocurrencies. Our analysis will be made on cryptocurrency pairs.
 These pairs allow us to compare costs between different cryptocurrencies. They are helpful for illustrating the relative worth of coins. For example,the question how much Bitcoin (BTC) equals in Ethereum (ETH) will be answered by the value of the pair BTC/ETH.
-In this report we are dealing with the BTC/USDT pair. USDT stands for Tether which is a stable coin in which each token is backed by a U.S Dollar.\\
+In this report we are dealing with the BTC/USDT pair. USDT stands for Tether which is a stable coin in which each token is backed by a U.S Dollar.
 The price of a token depends on the market cap of the currency and how many tokens are issued. And since there are hundreds of cryptocurrencies dealing with their prices can become very cumbersome and lack clarity. For that very reason, we have chosen to deal in our analysis with log-returns.
-Indeed, the price of a currency is not what is of interest to us but rather it's evolution. By studying prices we would be confronted with values that don't have an intrinsic meaning, However with log returns we will have an idea of the evolution in percentages, which is way more useful. To sum it up, this allows measuring a lot of variables in a comparable metric, thus enabling evaluation of analytic relationships amongst two or more variables despite originating from price series of unequal values. \\
+Indeed, the price of a currency is not what is of interest to us but rather it's evolution. By studying prices we would be confronted with values that don't have an intrinsic meaning, However with log returns we will have an idea of the evolution in percentages, which is way more useful. To sum it up, this allows measuring a lot of variables in a comparable metric, thus enabling evaluation of analytic relationships amongst two or more variables despite originating from price series of unequal values. 
 Concretely, if we are doing our study on a currency at time $i$ which is valued at price $p_i$. The log-return for the period $t$ is:
-$$\log\left(\frac{p_i}{p_{i-t}}\right)$$\\
-
+\[
+\log\left(\frac{p_i}{p_{i-t}}\right)
+\]
 Another important property is the additivity of the log-return. If our price at $t_1$ is $p_1$, it changes to $p_2$ at $t_2$ and move to $p_3$ at $t_3$. The log return from $t_1 $ to $t_2$ is $\log (p_2) - \log (p_1)$, the log return from $t_2 $ to $t_3$ is $\log (p_3) - \log (p_2)$. Therefore, it is clear that the log return from $t_1 $ to $t_3$ is $\log (p_3) - \log (p_1)$. This can be calculated easily. However, if we use simple return, the return should be $p_3/p_1$ instead of $p_3/p_2 + p_2/p_1$. Hence, log-return is easier to apply to real data.
 
- An interesting observation one can make when plotting the log-returns is that they are supposed to be normally distributed.
- 
- 
- \section{Exploratory data analysis}
+\section{Exploratory data analysis}
 Exploratory data analysis (EDA) is used in data analysis to analyze and investigate data sets and summarize their main characteristics. It helps determine how best to manipulate data sources to get the answers you need, making it easier to discover patterns, spot anomalies, test a hypothesis, or check assumptions.
 
 EDA is primarily used to see what data can reveal beyond the formal modeling or hypothesis testing task and provides a provides a better understanding of data set variables and the relationships between them. It can also help determine if the statistical techniques you are considering for data analysis are appropriate. Originally developed by American mathematician John Tukey in the 1970s, EDA techniques continue to be a widely used method in the data discovery process today.
@@ -236,14 +235,9 @@ The main purpose of EDA is to help look at data before making any assumptions. I
 
 \subsection{Distribution of prices and returns}
 
+As the very many stimuli and decisions that are involved in human decisions on the market are unknown to us, it is standard to treat price trajectories on markets such as the crypto market as stochastic. Consequently, we aim to have at least an elementary understanding of how prices change and how much trading occurs at any given time in the event that this information gives us inspiration for certain trading strategies. Figure (\ref{log return box}) shows the box plot of log-return of BTC. As can be seen from the graph, the mean value of log-return changing is around 0. with the first and third quantile around $-0.02$ and $0.02$. It is worth mentioning that there are lots of outliers. This means the price changes drastically on some days. -- this could motivate the study of extremes to find profit making opportunities. 
 
-
-
-Figure (\ref{log return box}) shows the box plot of log-return of BTC. As can be seen from the graph, the mean value of log-return changing is around 0. with the first and third quantile around -0.02 and 0.02. It is worth mentioning that there are lots of outliers. This means the price change drastically for some certain days.
-
-
-
-Figure \ref{7day rolling volume} is about 7 days rolling average of the volume. As the average volume is different within a week (In the weekday, there are more trades than in the weekend), we calculate the average volume of 7days to smooth the plot. From this figure, we see that the volume oscillate during our examining period. The volume sometime change drastically for a certain day. However, with the existence of up and down signals, we see there is a trend of volume increasing from the beginning of 2017-07 to 2021-07.
+Figure \ref{7day rolling volume} is about 7 days rolling average of the volume. As the average volume is different within a week (tn the weekday, there are more trades than in the weekend), we calculate the average volume of 7days to smooth the plot. From this figure, we see that the volume oscillate during our examining period. The volume sometime change drastically for a certain day. However, with the existence of up and down signals, we see there is a trend of volume increasing from the beginning of July 2017 to July 2021.
 
 
 \begin{figure}[!htbp]
@@ -260,64 +254,37 @@ Figure \ref{7day rolling volume} is about 7 days rolling average of the volume. 
     \caption{7 day rolling average of the volume}
     \label{7day rolling volume}
 \end{subfigure}
-\caption{(a) The box plot of log-return of BTC in the given period. (b) The line plot of the rolling average of the volume}
+\caption{(a) Box plot of log-return of BTC in the given period. (b) Line plot of the rolling average of the volume.}
 \label{fig:test}
 \end{figure}
 
-\subsection{Mean hourly BTC/USDT log-return by day, by week, and by month}
+\subsection{Average hourly BTC/USDT log-return by day, by week, and by month}
 
-In the following we show historical average hourly log-return based on the trading day, the trading week, or the trading month.
-\\ \\
-We can notice that historically, Thursday is a bad trading day, and if historical trends are any indication of future trends, we may want to consider avoiding trading on this particular day.
-\\ \\
-Similarly, we see that the months of March and September are historically quite bad months to trade and we may want (assuming this trend will repeat in the future) selling our BTC assets in the beginning of these months and buying back at the end of these months.
-\\ \\
-We display the charts below.
+This data is important to consider to get an overarching appreciation of how prices changes according to time -- a historically pivtoal factor in the trading of financial products. For example, one major difference between traditional stock markets and cryptocurrency markets is activity of weekends, which is not present in the former, and so behaviour at the open and close of the trading week needed to be considered carefully. In this field, the markets never sleep and so we expect to find somewhat different, interesting behaviours.
+From the visualisations inf Figures (\ref{Average hourly log-return for BTCUSDT per day} - \ref{Average hourly log-return for BTCUSDT per month}) we find that historically, Thursday is a bad trading day, subsequently if we ever use historical trends as an indication of future trends, we may want to consider avoiding trading on this particular day. Similarly, we see that the months of March and September are historically quite bad months to trade and we may want (assuming this trend will repeat in the future) to sell our BTC assets in the beginning of these months and buy back at the end of these months.
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[scale = 0.5]{Images/Average hourly log-return for BTCUSDT per day.png}
+    \includegraphics[width=0.7\linewidth]{Images/Average hourly log-return for BTCUSDT per day.png}
     \caption{Average hourly log-return for BTCUSDT per day}
     \label{Average hourly log-return for BTCUSDT per day}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[scale = 0.5]{Images/Average hourly log-return for BTCUSDT per week number.png}
+    \includegraphics[width=0.7\linewidth]{Images/Average hourly log-return for BTCUSDT per week number.png}
     \caption{Average hourly log-return for BTCUSDT per week number}
     \label{Average hourly log-return for BTCUSDT per week number}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[scale = 0.5]{Images/Average hourly log-return for BTCUSDT per month.png}
+    \includegraphics[width=0.7\linewidth]{Images/Average hourly log-return for BTCUSDT per month.png}
     \caption{Average hourly log-return for BTCUSDT per month}
     \label{Average hourly log-return for BTCUSDT per month}
 \end{figure}
 
 
-\subsection{Analysis of extremes}
 
-\begin{figure}[!htbp]
-    \centering
-    \includegraphics[width=\linewidth, scale=0.8]{Extremal Modelling/distplots_sans_outliers.png}
-    \caption{Distribution of log returns having eliminated outliers and a QQ plot of the data against a standard normal random variable. Clearly the data is still heavily tailed.}
-    \label{fig:distplots_sans_outliers}
-\end{figure}
-
-
-In finance, the question of extreme values is indubitably an important one. For example: stock market crashes, interest rates ad  insurance pricing based on life expectancy are all fields in which it would be necessary to consider rare events. The analysis of cryptocurrency trajectories is no different, indeed, sudden but large deviations in the trajectory of cryptocurrency prices would certainly be of interest to a trader. 
-
-In light of this, it is not unnatural to ask the corresponding statistical question in the context of extremes. In Figure \ref{fig:distplots_sans_outliers}, we can see that the distribution of log returns for our data set admits very heavy tails. In this dataset there are many statistically anomalous results which skew the data, but even upon their removal, the data remain strongly skewed, see Figure \ref{fig:distplots_sans_outliers}, the data still exhibit this skewed behaviour. This sparks interest in using extreme value theory to aid our understanding of this behaviour.\\
-
-If we observe a trajectory of prices $p_t$, for $t$ an index of time (e.g. prices per minute or hour, etc.), by assuming they come from a random sample, we can aim to fit their scaled extreme, either maximum or minimum, to a distribution of the following type \[
-G(x; \eta, \tau, \xi) = \begin{cases}
-\exp\left[-\left\{1+\xi(x-\eta)/\tau\right\}_+\right], & \xi \ne 0\\
-\exp\left[-\exp\left\{-(x-\eta)/\tau\right\}\right], & \xi = 0,
-\end{cases}
-\]
-where $\eta, \tau$ and $\xi$ are location, shape and scale parameters respectively. Studying maxima in this way is called the \textbf{block maxima approach}, since one groups data and considers fitting the distribution to the maxima across all groups, for example: maximum price over one day, where the prices are indexed by hours.
-
-The goal, then, would be to fit this model to our data, i.e. by finding the unknown parameters. To this end, we have available to use the R packages $\code{evd}$ and $\code{ismev}$ which give useful functions for extremal modelling and makes plotting diagnostics straightforward. We will demonstrate their capabilities in later sections. 
 
 
 
@@ -329,11 +296,9 @@ Unlike the traditional stock market, cryptocurrencies are traded without many re
 
 \section{Youtube trends}
 
-Youtube is the most dominant streaming platform worldwide. Many youtube channels are focused solely on cryptocurrencies and they do, sometimes, impact small market cap cryptocurrencies. In general, low market cap cryptocurrencies (below 10M USD) historical prices and data are hard to access and require APIs from numerous cryptocurrency exchanges each. Therefore, we will here confine ourselves to a general trend analysis of popular crypto Youtube channels.\\
-
-First we seek to figure out the search trends of Youtube, using Pytrends, an API for Google Trends, which allows us to retrieve the trending on Google search engines, including Youtube. We get the most trending queries on Youtube for the word 'Cryptocurrency'. From these we see four popular cryptocurrencies channel stand out, namely: Bitboy crypto, Banter crypto, Jrny crypto, and Crypto zombie.\\
-
-We then seek to observe the interest over time of each of these channels, as seen in Figure \ref{youtube_channel_crypto_trends}.
+Youtube is the most dominant streaming platform worldwide. Many Youtube channles concentrate their content solely on cryptocurrencies, consequently we find that sometimes they impact small market cap cryptocurrencies. In general, low market cap cryptocurrencies (below $10
+$M USD) historical prices and data are hard to access and each require APIs from numerous cryptocurrency exchanges. Therefore, we will confine ourselves here to a general trend analysis of popular crypto Youtube channels.
+First we seek to figure out the search trends of Youtube, using Pytrends, an API for Google Trends, which allows us to retrieve the trending on Google search engines, including Youtube. We get the most trending queries on Youtube for the word 'Cryptocurrency'. From these we see four popular cryptocurrencies channel stand out, namely: Bitboy Crypto, Banter Crypto, Jrny Crypto, and Crypto Zombie. Figures (\ref{youtube_channel_crypto_trends}-\ref{countries_map_2}) visualises the interest over time and geography in each of these channels.
 
 \begin{figure}[!htbp]
     \centering
@@ -342,13 +307,10 @@ We then seek to observe the interest over time of each of these channels, as see
     \label{youtube_channel_crypto_trends}
 \end{figure}
 
-
-Eventually we seek to observe the interest by region of one particular channel, Bitboy Crypto, a famous youtuber known to be influential in the sphere. If you are interested in map visualization, we use Choropleth map provided by Folium python package. We can see his viewership is mostly in the anglosphere, as we shall expect.
-
 \begin{figure}[!htbp]
     \centering
     \includegraphics[scale = 0.5]{Images/countries_rank_bitboy_crypto_youtube.png}
-    \caption{Bitboy Crypto is unsuprisingly most trending in anglophone countries.}
+    \caption{Bitboy Crypto is unsuprisingly most trending in anglophone countries. The \code{Choropleth} map provided by \text{Folium} python package is used to generate this plot.}
     \label{countries_rank_bitboy_crypto_youtube}
 \end{figure}
 
@@ -365,14 +327,14 @@ Twitter is an American microblogging and social networking service on which user
 
 One finds that some individuals are very aware of the impact they have on social media and often use their influence unreservedly. Elon Musk, a very well-known serial entrepreneur and founder of Tesla, who is also the richest man on the planet, has been heavily criticized for his influence on a few cryptocurrency stocks. He has embraced his role and was proclamed the Doge Father by the crypto community in reference to the cryptocurrency Dogecoin. He has been creating immense moves (both up and down) of price charts with his tweets.
 
-\subsection{Twitter strategy}
+\subsection{Twitter strategy: Elon Musk}
 Elon Musk's tweets unquestionably have great power. To create great profit inducing trading strategies it serves to try and quantify the power influencers like Elon Musk possess. In this section we will explore a simple trading strategy applied to BTCUSDT and DOGEUSDT currency pairs: \begin{strategy}[Elon Musk]
 Buy $1000\text{\$}$ whenever Elon musk tweets about a given cryptocurrency and hold this position for 24 hours. Once the 24 hour period has ended, sell the stock.
 \end{strategy}\label{strat:musk} 
 We will visualise the effectiveness of this strategy through the \textbf{profit and loss} (PnL) generated by this strategy. If our portfolio (number and type of quantities traded) has value $V_t$ for $t$ an index of time, then the sequence $(V_t)_{t=0}^T$ for some end-time $T$ is called the profit and loss of the portfolio through time.
 
 Users interact with Twitter through browser or mobile front-end software, however in order to collect their data from that platform computationally one has to do it via Twitter's APIs in a similar way to what we did to get the data from Binance.
-We have used the python library \code{snscrape.modules.twitter} to collect the data we needed. We then updated the buy signal accordingly. We have scraped Elon Musk's tweets in search of occurrences of the character strings 'BTC', 'bitcoin', 'dogecoin' or 'DOGE' to create the datasets dealing with bitcoin and dogecoin respectively. To do that we have used the function \code{sntwitter.TwitterSearchScraper}. Here are the results. \\
+We have used the python library \code{snscrape.modules.twitter} to collect the data we needed. We then updated the buy signal accordingly. We have scraped Elon Musk's tweets in search of occurrences of the character strings 'BTC', 'bitcoin', 'dogecoin' or 'DOGE' to create the datasets dealing with bitcoin and dogecoin respectively. To do that we have used the function \code{sntwitter.TwitterSearchScraper}. Here are the results. 
 
 \begin{figure}[!htbp]
     \centering
@@ -387,13 +349,9 @@ We have used the python library \code{snscrape.modules.twitter} to collect the d
     \caption{The strategy looks better for Doge and we can see a 100\% increase of the initial investment.}
     \label{}
 \end{figure}
-
- Tweets have a noticeable effect on the price of a currency, however, a tweet can negatively impact the price and suggests that one should pay attention to what is said in a tweet.\\
-For instance the huge up-trend after the $10^{th}$ entry point corresponds to a tweet in which he said "You can now buy a Tesla with Bitcoin" [24/03/2021]. We can infer that, this short sentence gave people a lot of hope and showed the interest of a massive company towards the cryptocurrency. The uptrend continued but then he talked about the risks and limitations of Bitcoin and said ``Bitcoin is actually highly centralized, with supermajority controlled by handful of big mining (aka hashing) companies. A single coal mine in Xinjiang flooded, almost killing miners, and Bitcoin hash rate dropped 35\%. Sound “decentralized” to you?" %\cite{Elon}[16/05/2021]. 
-From this we can infer that bitcoin traders lost confidence in the cryptocurrency, to use the crypto slang it spread FUD (fear uncertainty and doubt), and that caused a massive drop of the price.\\
-Knowing that a single person had so much power and could influence the prices easily in either way scared investors and Elon Musk received a lot of criticism and was accused of purposely affecting the markets to push his company's agenda. This criticism has led to a noticed dampening effect of his tweets \cite{ElonCriticism} \\
-Following this logic, it seemed natural to try to get a sense of how optimistic a tweet was before deciding whether or not to buy.\\
-For that very reason we have chosen to use the python library \code{textblob} \cite{loria2018textblob} for processing textual data and proceed to the sentiment analysis of the tweets. The function \code{sentiment.polarity} gave a score in $ [-1,1]$ indicating how positive a text is using averaging methods. For instance : \[\code{sentiment.polarity}(``\text{good}")=0.7\;\;\;\:\:\code{sentiment.polarity}(``\text{bad}")=-0.7.\]
+Tweets have a noticeable effect on the price of a currency, however, a tweet can negatively impact the price and suggests that one should pay attention to what is said in a tweet. For instance the huge up-trend after the $10^{th}$ entry point corresponds to a tweet in which he said "You can now buy a Tesla with Bitcoin" [24/03/2021]. We can infer that, this short sentence gave people a lot of hope and showed the interest of a massive company towards the cryptocurrency. The uptrend continued but then he talked about the risks and limitations of Bitcoin and said ``Bitcoin is actually highly centralized, with supermajority controlled by handful of big mining (aka hashing) companies. A single coal mine in Xinjiang flooded, almost killing miners, and Bitcoin hash rate dropped 35\%. Sound “decentralized” to you?" %\cite{Elon}[16/05/2021]. 
+From this we can infer that bitcoin traders lost confidence in the cryptocurrency, to use the crypto slang it spread FUD (fear uncertainty and doubt), and that caused a massive drop of the price. Knowing that a single person had so much power and could influence the prices easily in either way scared investors and Elon Musk received a lot of criticism and was accused of purposely affecting the markets to push his company's agenda. This criticism has led to a noticed dampening effect of his tweets \cite{ElonCriticism}. Following this logic, it seemed natural to try to get a sense of how optimistic a tweet was before deciding whether or not to buy. For that very reason we have chosen to use the python library \code{textblob} \cite{loria2018textblob} for processing textual data and proceed to the sentiment analysis of the tweets. The function \code{sentiment.polarity} gave a score in $ [-1,1]$ indicating how positive a text is using averaging methods. For instance : \[\code{sentiment.polarity}(``\text{good}")=0.7\;\;\;\:\:\code{sentiment.polarity}(``\text{bad}")=-0.7.\]
+\vspace{-1.5em}
 \begin{strategy}[Adding Sentiment]
 We have added to the previous strategy the condition that the tweet had to have a sentiment score greater or equal to $0.2$ for us to buy.\end{strategy}\label{strat:sent} 
 \begin{figure}[!htbp]
@@ -409,15 +367,49 @@ We have added to the previous strategy the condition that the tweet had to have 
     \label{}
 \end{figure}
 
-This  reduced the number of entry points by more than a half but missed out on great opportunities while doing so. That is probably because neutral sentences containing crucial information can be misinterpreted by the sentiment function. Indeed the sentence "you can buy tesla with bitcoin" has a score of $0$, While the sentence "bitcoin consumes too much energy" has a score of $0.2$.
-
-Of course this is also because our person of interest, Elon Musk, is not trying to energize the public but just making an announcement. In conclusion trying to gauge the sentiment of his tweets wasn't the best approach, and resulted in a loss of capital.
-
+This reduced the number of entry points by more than a half but missed out on great opportunities while doing so. That is probably because neutral sentences containing crucial information can be misinterpreted by the sentiment function. Indeed the sentence "you can buy tesla with bitcoin" has a score of $0$, While the sentence "bitcoin consumes too much energy" has a score of $0.2$. Of course this is also because our person of interest, Elon Musk, is not trying to energize the public but just making an announcement. In conclusion trying to gauge the sentiment of his tweets wasn't the best approach, and resulted in a loss of capital.
 Sentiment analysis is an efficient technique and should be used at a bigger scale when analyzing an important amount of tweets coming from different people, using it on a single person could lead to errors due to the personality of the source.
 
+\subsection{Twitter strategy: Ben Armstrong informative page}
+Ben Armstrong is a YouTuber, podcaster and crypto enthusiast. Better known as BitBoy Crypto, his objective is to educate and inform the crypto community. Indeed, his having millions of devoted followers made analysing his tweets seem relevant. Our aim is to analyse the sentiment of his tweets before investing, and find out if making decisions based on this sentiment leads to a valuable strategy. Precisely, we will comparing the profit and loss between buying blindly at every BitBoy Crpyto tweet mentioning Bitcoin and buying when signalled by a sufficiently positive BitBoy tweet. 
+\begin{strategy}[Crypto-influencer]
+Buy Bitcoin when a BitBoy Crypto tweet has a sentiment score above a certain threshold.  
+\end{strategy}\label{strat:sent} 
+\begin{figure}[!h]
+\begin{minipage}{.5\linewidth}
+\centering
+\subfloat[]{\label{pnl:a}\hspace{-2.5em} \includegraphics[scale=.6]{twitter_scraping/bitboy_pnl.png}}
+\end{minipage}%
+\begin{minipage}{.5\linewidth}
+\centering
+\subfloat[]{\label{pnl:b}\includegraphics[scale=.6]{twitter_scraping/bitboy_pnl_sent.png}}
+\end{minipage}\par\medskip
+\centering
+\caption{(a) Profit and loss from buying blindly after every tweet. (b) Profit and loss with sentiment threshold. Despite the fact that the number of entry has been reduced by a factor of 6, the PnL curve still has the same shape, however has experienced a negative shift (lower highs and lower lows).}
+\label{fig:pnl_naji102}
+\end{figure}
+
+Analyzing the sentiment of the tweets seems to be inaccurate and doesn't give any useful results. Our method and the package used is perhaps too simplistic. More advanced natural language processing methods should be considered, using machine learning techniques to take into account the crypto jargon might give much better results. We should also remark that crypto influencers are sometimes paid to promote a certain currency therefore one should be cautious when investing with this strategy. 
+
+%Actually shorting bitcoin at every tweet would generate profit.
 
 
+\subsection{Twitter strategy: whale watching}
+Indubitably, the idea of putting your money where wealthy people are putting theirs feels like a wise strategy to generate profit. A \textit{whale} is a cryptocurrency term that refers to individuals or entities that hold large amounts of a cryptocurrency. The Blockchains on which major cryptocurrencies are ran are public -- even though all users are not identifiable when an individual buys or sells a position worth millions of dollars -- so the information is available for everyone to see. It is fair to assume that the transactions of major players are aimed at moving markets in ways that benefit them at the expense of those on the other side of the trade (retail buyers) because they are trading to increase the value of their own portfolio. On twitter, there are a lot of accounts reporting such moves and a strategy could be to follow these big transactions and to buy when they happen.
 
+Our intuition inspired us to monitor whales to see their trading patterns and to get a sense of their holdings. If whales are reducing their holdings as the price goes up, one could infer that a market peak could be approaching.
+\begin{strategy}[Whale Watching]
+Scrape the twitter account "WhaleTrades" looking for both the appearance of "\$ETH" and "longed" which essentially means that an important amount was bet on the rise of Ethereum, and buy when this happens. 
+\end{strategy}\label{strat:sent} 
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[scale = 0.5]{twitter_scraping/ETH-whales.png}
+    \caption{Profit and loss from the whale watching strategy. Our initial investment is 12 times the the value used in previous experiements. We observe that the drops are controlled.}
+    \label{fig: wwPnL}
+\end{figure}
+
+If we compare the PnL in Figure (\ref{fig: wwPnL}) to other strategies, we observe a healthy improvement here. We may take this as an indication that markets are heavily manipulated, meaning more savvy retail buyers can leverage this buy following media to make profits, while the market makers take advantage of poor decisions by layman retail buyers to continue their market manipulation strategies.
 
 \section{Medium}\label{sec:medium}
 Medium is an American online publishing platform developed by Evan Williams and launched in August 2012. The platform gives its members the ability to read and participate in social journalism, having a hybrid collection of amateur and professional people and publications. The site is regularly regarded as a blog hosting platform \cite{streitfeld2017internet}.
@@ -763,9 +755,10 @@ To conclude, the results verify our intuition. Indeed, Bitcoin prices Granger-ca
 
 \subsection{Strategy based on Bitcoin influence}
 
-In this section we offer to investigate the following: We assume, from our observation, that every time bitcoin sees a significant drops in price, all other cryptocurrencies see important drops in turns. We consider this as a buy signal, and assume an immediate recovery of the price (therefore selling in the next time period that follows). Note that this later assumption is certainly not correct and indeed, once the price drops, and more significant drops can occur right after. To go further in our analysis, one may wish to consider Moving Average recovery and price retracement strategies.
-\\
-So far, we display below the PnL ('Profit-and-Loss') of our strategy, versus a simple buy-and-hold strategy. 
+We now present a trading strategy justified by the statistical results of the previous section. We assume, guided by our observations, every time bitcoin sees a significant drop in price, all other cryptocurrencies see significant drops in turn. \begin{strategy}[Bitcoin drops]
+Whenever Bitcoin experiences a significant drop in price, we buy Ethereum, and sell in the next time period that follows.
+\end{strategy} 
+Note that this strategy assumes an immediate recovery of the price once one observation sees a significant drop. This assumption is based on experience but is nevertheless a substantial simplification; indeed, once the price drops, more significant drops can occur immediately afterwards. To go further in our analysis, one may wish to consider Moving Average recovery and price retracement strategies. In Figure (\ref{fig:backtested_strategy_2}) we display the PnL ('Profit-and-Loss') of our strategy, versus a simple buy-and-hold strategy. 
 
 \begin{figure}[!htbp]
     \centering
@@ -776,7 +769,7 @@ So far, we display below the PnL ('Profit-and-Loss') of our strategy, versus a s
 
 
 
-\section{Machine Learning}
+\section{Machine Learning Approach}
 Machine learning (ML) is a type of artificial intelligence (AI) that build models to become more accurate at predicting outcomes without being explicitly programmed to do so. Machine learning algorithms use historical data as input to predict new output values. Recently, machine learning performs nicely in various predication tasks in various areas. One simple idea is to use techniques in machine learning to predict the price of cryptocurrency and earn extra money from it.
 
 \subsection{Evaluation}
@@ -922,7 +915,37 @@ Figure \ref{fig:LSTM PNL} for the relaisation of our backtesting. It can be seen
 \end{figure}
 
 
-\bibliography{references}
-\end{spacing}
 
+
+\bibliographystyle{vancouver}
+\bibliography{references}
+
+
+\end{spacing}
 \end{document}
+
+%%%%%%%%%%Maybe used later%%%%%%%%%%%%%%
+
+%\subsection{Analysis of extremes}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth, scale=0.8]{Extremal Modelling/distplots_sans_outliers.png}
+    \caption{Distribution of log returns having eliminated outliers and a QQ plot of the data against a standard normal random variable. Clearly the data is still heavily tailed.}
+    \label{fig:distplots_sans_outliers}
+\end{figure}
+
+
+In finance, the question of extreme values is indubitably an important one. For example: stock market crashes, interest rates ad  insurance pricing based on life expectancy are all fields in which it would be necessary to consider rare events. The analysis of cryptocurrency trajectories is no different, indeed, sudden but large deviations in the trajectory of cryptocurrency prices would certainly be of interest to a trader. 
+
+In light of this, it is not unnatural to ask the corresponding statistical question in the context of extremes. In Figure \ref{fig:distplots_sans_outliers}, we can see that the distribution of log returns for our data set admits very heavy tails. In this dataset there are many statistically anomalous results which skew the data, but even upon their removal, the data remain strongly skewed, see Figure \ref{fig:distplots_sans_outliers}, the data still exhibit this skewed behaviour. This sparks interest in using extreme value theory to aid our understanding of this behaviour.\\
+
+If we observe a trajectory of prices $p_t$, for $t$ an index of time (e.g. prices per minute or hour, etc.), by assuming they come from a random sample, we can aim to fit their scaled extreme, either maximum or minimum, to a distribution of the following type \[
+G(x; \eta, \tau, \xi) = \begin{cases}
+\exp\left[-\left\{1+\xi(x-\eta)/\tau\right\}_+\right], & \xi \ne 0\\
+\exp\left[-\exp\left\{-(x-\eta)/\tau\right\}\right], & \xi = 0,
+\end{cases}
+\]
+where $\eta, \tau$ and $\xi$ are location, shape and scale parameters respectively. Studying maxima in this way is called the \textbf{block maxima approach}, since one groups data and considers fitting the distribution to the maxima across all groups, for example: maximum price over one day, where the prices are indexed by hours.
+
+The goal, then, would be to fit this model to our data, i.e. by finding the unknown parameters. To this end, we have available to use the R packages $\code{evd}$ and $\code{ismev}$ which give useful functions for extremal modelling and makes plotting diagnostics straightforward. We will demonstrate their capabilities in later sections. 
