@@ -147,57 +147,31 @@ bodyfont=\fontfamily{cmss}\selectfont\itshape,
 \chapter{Introduction}
 
 \section{Background and scope}
-Let's begin by presenting a general overview, during which we'll go through the key-terms needed to understand this project.
+A cryptocurrency is a tradable digital asset or digital form of money, built on blockchain technology that only exists online. Examples include Bitcoin, Ethereum and Dogecoin. Since its inception in 2008, its popularity has done nothing but grow, leisurely at first, but its popularity has somewhat exploded in recent years. Cryptocurrencies are attractive to many because they are accessible to all, unlike the traditional stock market (until recently). For this reason, their prices are highly susceptible to a variety of factors such as news and social media, much like that of a traditional stock market although perhaps even more sensitive due to the nonexistent perspective of exclusivity -- for example, prices could change due to a trend on Instagram, instead of the more high-level and obscure knowledge of a scandalous exodus of a large company CEO. The aim of this project is to find macro-scale factors which drive fluctuations in cryptocurrency prices and to leverage them in developing profit generating trading strategies. 
 
-When faced with a given cryptocurrency, what we see on a price chart is the value of a single \textbf{token}.
-The value of a token is equal to the market cap (total value of the network noted MC) of a currency divided by the total circulating supply (number of tokens noted CS).
-Bitcoin has a circulating supply of 19 million tokens but a total supply of 21 million tokens. The difference between the circulating supply and the total supply is the amount still available to be mined, and indicates future inflation. 
-$$\text{Token}_\text{BTC}=\frac{\text{MC}}{\text{CS}}$$
+Let us breifly offer some technical backgorund. When faced with a given cryptocurrency, what we see on a graph of the \textbf{price} of a currency is the value of a single \textbf{token}. The value of a token is equal to the market cap (total value of the network; denoted MC) of a currency divided by the total circulating supply (number of tokens; denoted CS). For example, Bitcoin has a circulating supply of 19 million tokens but a total supply of 21 million tokens. The difference between the circulating supply and the total supply is the amount still available to be mined, and indicates future inflation. 
+\[\text{Value of a Token}\, =\frac{\text{MC}}{\text{CS}}.\]
 \begin{figure}[!htbp]
     \centering
     \includegraphics[scale = 0.7]{TestPlots/BTC_overview.png}
     \caption{The price chart of Bitcoin from 2017 to 2021}
     \label{BTC overall}
 \end{figure}
-
-Just by looking at the chart in Figure \ref{BTC overall}, one can realise how volatile bitcoin has been and this particularity is shared by many other cryptocurrencies.\\
-Bitcoin went from $10\text{K}\$$ in September 2020 to over $60\text{K}\$$ in April 2021, but also lost half of it's value from April to July 2021.
-One can say without doubt that the prices are on a roller coaster, everyone wants to experience the upward trends however the downfalls are extremely scary.\\
-
-Of course, not all cryptos follow the same trends some might be rising while others are crashing, and the goal of crypto-trading is to ride the right wave at the right time, and jump off the ship before it sinks. That is why we will be dealing with crypto pairs which are explained further.\\
-The prices fluctuate according to many variables such as news, regulations, announcements, general sentiment etc... Of course risk is involved and that's why the best way to navigate these dangerous waters is to have a set plan and the right logic to follow.
-
-
-
-
-
-
+In Figure (\ref{BTC overall}), we look at the value of this token in USD over a significant period of time. One realises that Bitcoin prices have been very volatile over the years and this feature is shared by many other cryptocurrencies. Bitcoin went from $10,000$ USD in September 2020 to over $60,000$ USD in April 2021, but also lost half of it's value from April to July 2021. Of course, not all cryptos follow the same trends simultaneously. Some might be rising while others are crashing, and the goal of crypto-trading is to ride the right wave at the right time, and jump off the ship before it sinks. That is why it is sensible to deal with pairs cryptocurrencies to explot the relationships between them.\\
 
 \section{Aim}
 
-The goal of this project is to proceed to the analysis of an optimal trading (buy-and-sell) strategy for the market of Cryptocurrencies. In particular, we will investigate 4 range of strategies, namely, a first general Exploratory Data Analysis which shall lead us to discover some general historical trends over the days and months of trading (e.g. Thursday is generally a bad day to trade Bitcoin with a negative log-return overall). Secondly, we will investigate how social networks influences cryptocurrencies prices, we will propose buy-and-sell strategies accordingly, and shall backtest the latter. Later on in the project we shall proceed to analysis of cryptocurrencies interactions, cycles, and trends forecasting. We wish to pick the top trending cryptocurrencies right before they actually become top-trending cryptocurrencies. Eventually we shall conclude this project with the analysis of extremes. \\
+The goal of this project is to proceed to the analysis of an optimal trading (buy-and-sell) strategy for the market of Cryptocurrencies. In particular, we will investigate 4 range of strategies, namely, a first general Exploratory Data Analysis which shall lead us to discover some general historical trends over the days and months of trading (e.g. Thursday is generally a bad day to trade Bitcoin with a negative log-return overall). Secondly, we will investigate how social networks influences cryptocurrencies prices, we will propose buy-and-sell strategies accordingly, and shall backtest the latter. Later on in the project we shall proceed to analysis of cryptocurrencies interactions, cycles, and trends forecasting. We wish to pick the top trending cryptocurrencies right before they actually become top-trending cryptocurrencies. We shall conclude this project with the analysis of extremes fluctuations in price. \\
 
-
-Before starting our analysis, the reader should know that, unlike stock markets, for which financial data are extremely onerous, cryptocurrencies data are far less expensive and far more accessible. In particular, we use Binance's (a major cryptocurrency exchange platform) API to extract the historical trading prices of every exchange pair on its platform. It's API allows us to obtain the historical prices over 1 day, 1 hour, and even 1 minute period. We shall obtain open, high, low, close (OHLC) prices for the according period. The trading volume is also provided. We provide further details regarding these data in the next section.\\
-
-
-
-If you do not want to get your hands dirty (which is understandable) navigating through the code to download the data, simply download a subset of the historical data we use at this link : \url{https://drive.switch.ch/index.php/s/URDxQbEv8LqSkB2}
-
-
+Before starting our analysis, the reader should know that, unlike stock markets, the data for which are extremely onerous to acces, cryptocurrencies data are far less expensive and far more accessible. In particular, we use Binance's (a major cryptocurrency exchange platform) API to extract the historical trading prices of every exchange pair on its platform. It's API allows us to obtain the historical prices over 1 day, 1 hour, and even 1 minute period. We shall obtain open, high, low, close (OHLC) prices for the according period. The trading volume is also provided. We provide further details regarding these data in the next section. A subset of the historical data we use is available at this link: \url{https://drive.switch.ch/index.php/s/URDxQbEv8LqSkB2}.
 
 
 \section{Data}
 \subsection{Data extraction and processing}
+The data extracted from Binance's API -- using Python to access it -- will contain price data at various time points and intervals for a chosen cryptocurrency. We remark that that we have never encountered any NA values or other seemingly out-of-place values that would need to be rejected. Indeed, so called 'out-of-place values' or any other outliers kind of value are strong indicators which require further investigations and may be relevant to dedicated algorithmic trading strategies. We absolutely do not want to remove them as we may be tempted to do in some other contexts in data science.\\
 
-
-Note that we have never encountered any NA values or other seemingly out-of-place values that would need to be rejected. Indeed, so called 'out-of-place values' or any other outliers kind of value are strong indicators which require further investigations and may be relevant to dedicated algorithmic trading strategies. We absolutely do not want to remove them as we may be tempted to do in some other contexts in data science.\\
-
-Discrepancies in the timestamp of our data : Missing time periods. Every once in a while there is a major crash in cryptocurrencies market (i.e. prices dropping significantly). This leads to a massive amount of people trying to connect to the cryptocurrencies exchange platforms to try to sell (or buy) some cryptocurrencies.This often results in the exchange becoming unavailable, their server not being able to handle so many connections attempts at once. This explains the missing data in historical cryptocurrencies prices data (It can be for a couple of minutes up to a couple of hours). We therefore compute 'time\_diff\_in\_days' and 'time\_diff\_in\_min' to spot any such discrepancies in the timestamp. For example, in a 1-hour dataset we expect that time difference between line i and line i-1 to be 60 min. If it appears to be 57 minutes, we know there was a crash that occured and therefore can decide our backtesting programme to not consider (i.e. to pause) this very particular time period. It is a useful method to rigoursly proceed to backtesting algorithm. \\
-
-
-
-It is important to note that sometimes the dataset obtained via the extraction in Python can have missing rows of data, i.e. a time series with some missing dates/times depending on the resolution of the data set. As our analyses will be making decisions at every time step in the relevant dataset, this is inconvenient. One way to circumvent this is to \textbf{impute} the time series, and there are software packages available to do this. For example, in section \ref{reddit} on Reddit networks, an R package called \code{imputeTS} is used to do this, with the function \code{na\_kalman} which replaces \code{NA} values in the dataset using nearby values by Kalman Smoothing []. This method is one of the most recommended in the package [],
+From time to time, one might find missing time periods in the extracted data. Fo example, every once in a while there is a major crash in cryptocurrencies market (i.e. prices dropping significantly). This leads to a massive amount of people trying to connect to the cryptocurrencies exchange platforms to try to sell (or buy) some cryptocurrencies.This often results in the exchange becoming unavailable, their server not being able to handle so many connections attempts at once. This explains the missing data in historical cryptocurrencies prices data (It can be for a couple of minutes up to a couple of hours). We therefore compute the time difference in days and time difference in minutes between pairs of consectives rows of data to spot any such discrepancies in the timestamp and add these to the data set. For example, in a 1-hour dataset we expect that time difference between line i and line i-1 to be 60 min, if, say, it appears to be 57 minutes, we know there was a crash that occured and therefore can decide our strategy testing programme to not consider (i.e. to pause) this very particular time period. It is a useful method to rigoursly proceed to strategy testing algorithm. 
+Although, for the purposes of statistical analysis this discrepancy can be problematic. One way to circumvent this issue is to \textbf{impute} the time series, and there are software packages available to do this. For example, in section \ref{reddit} on Reddit networks, an R package called \code{imputeTS} is used to do this, with the function \code{na\_kalman} which replaces \code{NA} values in the dataset using nearby values by Kalman Smoothing [ref]. This method is one of the most recommended in the package [ref],
 
 \begin{figure}[H]
     \centering
@@ -209,14 +183,10 @@ It is important to note that sometimes the dataset obtained via the extraction i
 
 Going further, once an analysis is performed on a dedicated dataset (e.g. 1 hour BTC/USDT historical data), the same statistical analysis can be performed over any dataset (e.g. 1 minute ETH/CHF historical data), since the data structure (i.e. the columns, open, high, low, close) is the same.
 
-
-
 \subsection{Data transformation}
 
-The goal of this project is to proceed to the analysis of an optimal trading (buy-and-sell) strategy for the market of Cryptocurrencies. Our analysis will be made on cryptocurrency pairs.
-These pairs allow us to compare costs between different cryptocurrencies. They are helpful for illustrating the relative worth of coins. For example,the question how much Bitcoin (BTC) equals in Ethereum (ETH) will be answered by the value of the pair BTC/ETH.
-In this report we are dealing with the BTC/USDT pair. USDT stands for Tether which is a stable coin in which each token is backed by a U.S Dollar.
-The price of a token depends on the market cap of the currency and how many tokens are issued. And since there are hundreds of cryptocurrencies dealing with their prices can become very cumbersome and lack clarity. For that very reason, we have chosen to deal in our analysis with log-returns.
+The goal of this project is to proceed to the analysis of an optimal trading (buy-and-sell) strategy for the market of cryptocurrencies. Our analysis will be made on cryptocurrency pairs. These pairs allow us to compare costs between different cryptocurrencies. They are helpful for illustrating the relative worth of coins. For example,the question how much Bitcoin (BTC) equals in Ethereum (ETH) will be answered by the value of the pair BTC/ETH. In this report we will often be dealing with the BTC/USDT pair. USDT stands for Tether which is a stable coin in which each token is backed by a U.S Dollar.
+The price of a token depends on the market cap of the currency and how many tokens are issued. Since there are hundreds of cryptocurrencies dealing with their prices can become very cumbersome and lack clarity. For that very reason, we have chosen to deal in our analysis with log-returns.
 Indeed, the price of a currency is not what is of interest to us but rather it's evolution. By studying prices we would be confronted with values that don't have an intrinsic meaning, However with log returns we will have an idea of the evolution in percentages, which is way more useful. To sum it up, this allows measuring a lot of variables in a comparable metric, thus enabling evaluation of analytic relationships amongst two or more variables despite originating from price series of unequal values. 
 Concretely, if we are doing our study on a currency at time $i$ which is valued at price $p_i$. The log-return for the period $t$ is:
 \[
@@ -292,7 +262,7 @@ From the visualisations inf Figures (\ref{Average hourly log-return for BTCUSDT 
 
 \chapter{Social media's influence on cryptocurrency prices}
 
-Unlike the traditional stock market, cryptocurrencies are traded without many regulations and are accessible to essentially anyone with an internet connection. Therefore it is not surprising that cryptocurrencies are perhaps more sensitive to human behaviour than traditional stocks; including a much more chaotic response to sudden trends and attitudes of these traders. This is indubitably heavily impacted by social media. We aim in this chapter to leverage this observation to generate winning strategies for trading on the market. 
+Unlike the traditional stock market, cryptocurrencies are traded without many regulations and are accessible to essentially anyone with an internet connection. Therefore it is not surprising that cryptocurrencies are perhaps more sensitive to human behaviour than traditional stocks; including a much more chaotic response to sudden trends and attitudes of these traders. This is indubitably heavily impacted by social media. We aim in this chapter to leverage this observation to generate winning strategies for trading on the market. Once a strategy has been constructed, it is then tested using a so-called \textbf{backtesting} algorithm. This term indicates that our strategy is applied to historical data to assess its performance over already observed prices.  
 
 \section{Youtube trends}
 
