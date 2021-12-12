@@ -545,7 +545,7 @@ We now use the ideas presented in section \ref{sec:redditSN} to identify the mos
 
 
 
-To study and visualise the graph, we explored the R packages \code{igraph} (the cousin of \code{networkX} in R), \code{ggraph}, \code{visNetwork}, \code{graphlayouts} extensively. Moreover, a very recent development in the field of network science has constructed the centrality measure, \textbf{Integrated Value of Influence} (IVI), which uses various statistical tests to compare various centrality measures for a graph to determine the most influential nodes. Fortunately, the authors of that paper have created a comprehensive R package called \code{influential} whose function \code{ivi} does the heavy lifting for us. This function will calculate the various centrality measures for us, compute the IVI for each node, which is scaled to lie between $0$ and $100$. To explore our results, please visit our Rshiny application \textbf{\url{https://kcvis.shinyapps.io/network_analysis/}} to play around interactively with the network formed and discover properties of its nodes. 
+To study and visualise the graph, we explored the R packages \code{igraph} (the cousin of \code{networkX} in R), \code{ggraph}, \code{visNetwork}, \code{graphlayouts} extensively. Moreover, a very recent development in the field of network science has constructed the centrality measure, \textbf{Integrated Value of Influence} (IVI), which uses various statistical tests to compare various centrality measures for a graph to determine the most influential nodes [ref]. Fortunately, the authors of that paper have created a comprehensive R package called \code{influential} whose function \code{ivi} does the heavy lifting for us [ref]. This function will calculate the various centrality measures for us, compute the IVI for each node, which is scaled to lie between $0$ and $100$. To explore our results, please visit our Rshiny application \textbf{\url{https://kcvis.shinyapps.io/network_analysis/}} to play around interactively with the network formed and discover properties of its nodes. 
 
 
 
@@ -651,7 +651,7 @@ To conclude, we calculate from $1000$ samples the bootstrapped $95\%$ confidence
 
 This analysis is of course limited. For example, we didn't consider the content of the posts, and we performed the analysis of a relatively short time frame. But this is analysis is intended to be informative. Going further, we would aim to continue this analysis for various authors and various (longer) time frames to build a much more comprehensive strategy which encompasses all the information we glean from that analysis, nevertheless, what we observe here is promising, and certainly supports the use of network modelling to identify important members of communities. Moreover, in an even more precise analysis, it would serve to organise posts by words mentioned in them, then we can make decisions based on the content of posts and not their existence alone.
 
-{\color{red} TO ADD: some form of discussion }
+%{\color{red} TO ADD: some form of discussion }
 
 
 \chapter{Prediction Based Methods}
