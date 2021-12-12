@@ -264,7 +264,7 @@ From the visualisations inf Figures (\ref{Average hourly log-return for BTCUSDT 
 
 Unlike the traditional stock market, cryptocurrencies are traded without many regulations and are accessible to essentially anyone with an internet connection. Therefore it is not surprising that cryptocurrencies are perhaps more sensitive to human behaviour than traditional stocks; including a much more chaotic response to sudden trends and attitudes of these traders. This is indubitably heavily impacted by social media. We aim in this chapter to leverage this observation to generate winning strategies for trading on the market. Once a strategy has been constructed, it is then tested using a so-called \textbf{backtesting} algorithm. This term indicates that our strategy is applied to historical data to assess its performance over already observed prices.  
 
-\section{Youtube trends}
+\section{Youtube trends}\label{YT Trends}
 
 Youtube is the most dominant streaming platform worldwide. Many Youtube channles concentrate their content solely on cryptocurrencies, consequently we find that sometimes they impact small market cap cryptocurrencies. In general, low market cap cryptocurrencies (below $10
 $M USD) historical prices and data are hard to access and each require APIs from numerous cryptocurrency exchanges. Therefore, we will confine ourselves here to a general trend analysis of popular crypto Youtube channels.
@@ -341,7 +341,7 @@ This reduced the number of entry points by more than a half but missed out on gr
 Sentiment analysis is an efficient technique and should be used at a bigger scale when analyzing an important amount of tweets coming from different people, using it on a single person could lead to errors due to the personality of the source.
 
 \subsection{Twitter strategy: Ben Armstrong informative page}
-Ben Armstrong is a YouTuber, podcaster and crypto enthusiast. Better known as BitBoy Crypto, his objective is to educate and inform the crypto community. Indeed, his having millions of devoted followers made analysing his tweets seem relevant. Our aim is to analyse the sentiment of his tweets before investing, and find out if making decisions based on this sentiment leads to a valuable strategy. Precisely, we will comparing the profit and loss between buying blindly at every BitBoy Crpyto tweet mentioning Bitcoin and buying when signalled by a sufficiently positive BitBoy tweet. 
+Ben Armstrong is a YouTuber, podcaster and crypto enthusiast. Better known as BitBoy Crypto, the same individual as in section \ref{YT Trends}, his objective is to educate and inform the crypto community. Indeed, his having millions of devoted followers made analysing his tweets seem relevant. Our aim is to analyse the sentiment of his tweets before investing, and find out if making decisions based on this sentiment leads to a valuable strategy. Precisely, we will comparing the profit and loss between buying blindly at every BitBoy Crpyto tweet mentioning Bitcoin and buying when signalled by a sufficiently positive BitBoy tweet. 
 \begin{strategy}[Crypto-influencer]
 Buy Bitcoin when a BitBoy Crypto tweet has a sentiment score above a certain threshold.  
 \end{strategy}\label{strat:sent} 
@@ -392,16 +392,10 @@ As we know, many cryptocurrencies are run by companies or individuals. They main
 
 
 \subsection{Data Preprocessing}
-In this section, we explain how we access the data from the medium and the changes of cryptocurrency price. For the medium publications, we use webscraping techniques via some python libraries (\code{BeautifulSoup4 , request} and \code{selenium}). At first, we use \code{request} to acquire the source code of the website from \url{https://medium.com/@kyberteam}. This allows us to access the information via the python.  With the help of library \code{selenium}, we are able to acquire the full information of the source code. After that, we use functions in the library \code{BeautifulSoup4} to parse the whole source code. By doing so, we can deal with this HTML information much easier with Python. With the \code{find\_all} function, we can find all information that interests us in each article. In our case, we think the update time of the article and the title of the article might be helpful for developing strategies. Therefore, using techniques we just introduced, we have a dataframe that contains the update time (denoted as \code{date}) and title for all of the medium articles (denoted as \code{title}) from Kyber.
+Let us explain how we access the data from Medium and the changes of cryptocurrency price. For Medium publications, we use webscraping techniques via some Python libraries (\code{BeautifulSoup4 , request} and \code{selenium}) [ref]. At first, we use \code{request} to acquire the source code of the website from \url{https://medium.com/@kyberteam}. This allows us to access the information via Python. Using the library \code{selenium}, we are able to acquire the full information of the source code. After that, we use functions in the library \code{BeautifulSoup4} to parse the whole source code. By doing so, we can deal with this HTML information much easier with Python. With the \code{find\_all} function, we can find all information that interests us in each article. In our case, we think the update time of the article and the title of the article might be helpful for developing strategies. Therefore, using techniques we just introduced, we have a dataframe that contains the update time (denoted as \code{date}) and title for all of the medium articles (denoted as \code{title}) from Kyber.
+Upon closer inspection, we found that Kyber do not update their Medium account everyday. We guess updating an article or not is a good signal in developing strategies. So we make a new feature called \code{signal}. It is a binary variable, and the entry is given value 1 if Kyber posted on that day on Medium and 0 otherwise.  For the \code{title}, we want to apply sentiment analysis used in Twitter and keyword checking (To see if it contain certain keyword like 'announcement') at first. However, as a big company based in Asia, Kyber published a large amount of articles that not in English. As a result, it is not easy to do the analysis based on these different languages.  
 
-When looking into details, we found that they do not update their medium everyday. We guess updating an article or not is a good signal in developing strategies. So we make a new feature called \code{signal}. It is a binary variable, and the entry is given value 1 if Kyber posted on that day at medium and 0 otherwise.  For the \code{title}, we want to apply sentiment analysis used in Twitter and keyword checking (To see if it contain certain keyword like 'announcement') at first. However, as a big company based in Asia, Kyber published a large amount of articles that not in English. As a result, it is not easy to do the analysis based on these different languages.  
-
-
-
-
-Another work is about the preprocessing of the price changing data. To achieve this goal, we us an API from Binance to access to the cryptocurrency price. Binance is a cryptocurrency exchange which is currently the largest exchange in the world in terms of daily trading volume of cryptocurrencies. With the help of Binance API, we are able to extract the details for price changing of Kyber and analysize it with Python. We put these details into another dataframe, and merge it with the dataframe with medium information. After choosing relevant information, we have some features that are listed in the Table \ref{tab:feature}. 
-
-As the Kyber begun to trade on Binance since 2020-06-12, the data we select are between 2020-06-12 to 2021-11-16.
+We merge price data obtained from Binance with the dataframe containing information from Medium. After choosing relevant information, we have some features that are listed in the Table \ref{tab:feature}. As the Kyber begun to trade on Binance on 12 June 2020, the data we select are between 12 June 2020 and 16 November 2021, to give a current dataset. 
 
 
 \begin{table}[!htp]
@@ -423,7 +417,7 @@ As the Kyber begun to trade on Binance since 2020-06-12, the data we select are 
 
 
 \subsection{Statistical Analysis}
-We will investigate the strength of correlation between \code{opcl} and other features. If we find some strong correlations between \code{opcl} and some features, we can use that fact to inform a great trading price within a day. In order to do that, we use python to calculate the Pearson's correlation between them.   Unfortunately, we can't find any features that strong correlate with the \code{opcl}. As can be seen from figure (\ref{medium stats}), the correlations between all the features and \code{opcl} are small. The abosolute value of them are less than 0.4, which means there is no correlations or weak correlations. Therefore, we cannot use this correlation result directly to develop a new strategy.
+We will investigate the strength of correlation between \code{opcl} and other features. If we find some strong correlations between \code{opcl} and some features, we can use that fact to inform a great trading price within a day. In order to do that, we use python to calculate the Pearson's correlation between them. Unfortunately, we can't find any features that strong correlate with the \code{opcl}. As can be seen from figure (\ref{medium stats}), the correlations between all the features and \code{opcl} are small. The abosolute value of them are less than 0.4, which means there is no correlations or weak correlations. Therefore, we cannot use this correlation result directly to develop a new strategy.
 
 \begin{figure}[!htbp]
     \centering
@@ -433,10 +427,8 @@ We will investigate the strength of correlation between \code{opcl} and other fe
 \end{figure}
 
 
-\subsection{Medium Strategy }
-Besides statistical analysis, we tried some direct strategies with signals and do backtestings to judge their usefulness. 
-
-
+\subsection{Medium Strategy}
+Besides statistical analysis, we tried some direct strategies with signals and perform backtesting to judge their usefulness. 
 
 \begin{strategy}[Kyber Next Day]
 If Kyber updates an article on date $t$, we spend all the money to buy the cryptocurrency on date $t$ with the open price and sell them all at the open price on date $t+1$.
@@ -451,7 +443,7 @@ We compare the two strategies with a baseline, which is the simplest strategy: b
 \begin{figure}[!h]
     \centering
     \includegraphics[scale =  0.65]{Images/medium backtesting.png}
-    \caption{Back testing of two strategies mentioned above. All the money are in USD. It can be seen clearly that the two strategy outperform the baseline the majority of the time.}
+    \caption{Backtesting of two strategies mentioned above. All the money are in USD. It can be seen clearly that the two strategy outperform the baseline the majority of the time.}
     \label{backtest medium}
 \end{figure}
 
@@ -681,7 +673,7 @@ In general, Granger causality has some limitations, in that does not provide any
 
 \subsubsection{Do Bitcoin prices Granger-cause Ethereum prices?}
 Before proceeding in answering this question, we must ensure that the data we use meet the requirements of the Granger causality test, in that the data are stationary. As we discussion in the introduction, data extracted from online exchanges gives absolute prices of a currency at a given time, and like traditional financial time series, this is famously non-stationary. To overcome this, we make the log-return transformation \[
-\log\left(\frac{P_t}{P_{t-1}}\right) 
+\log\left(\frac{P_t}{P_{t-1}}\right), 
 \]
 where $P_t$ is the close price at time $t$ of a given quantity. This transformation does not mask our interpretation of the results since, by a standard first order Taylor approximation \[
 100\log\left(\frac{P_t}{P_{t-1}}\right) = 100\log\left(1 + \frac{P_t - P_{t-1}}{P_{t-1}}\right) \approx 100 \times \frac{P_t - P_{t-1}}{P_{t-1}},
@@ -709,7 +701,7 @@ To conclude, the results verify our intuition. Indeed, Bitcoin prices Granger-ca
   $p$-value & 0.049 & 0.017 & 0.014 & 0.030 & 0.033 \\ 
    \hline
 \end{tabular}
-\caption{Granger causality test scores for predicting ethereum returns with Bitcoin returns} \label{tab:btc_cause_eth}
+\caption{Granger causality test scores for predicting ethereum returns with Bitcoin returns. Bitcoin prices do Granger-cause Ethereum prices.} \label{tab:btc_cause_eth}
 \end{table}
 
 \begin{table}[!htbp]
@@ -720,15 +712,15 @@ To conclude, the results verify our intuition. Indeed, Bitcoin prices Granger-ca
   $p$-value & 0.081 & 0.196 & 0.207 & 0.189 & 0.276 \\ 
    \hline
 \end{tabular}
-\caption{Granger causality test scores for predicting Bitcoin returns with ethereum returns} \label{tab:eth_cause_btc}
+\caption{Granger causality test scores for predicting Bitcoin returns with ethereum returns. Ethereum prices do not Granger-cause Bitcoin prices.} \label{tab:eth_cause_btc}
 \end{table}
 
 \subsection{Strategy based on Bitcoin influence}
 
-We now present a trading strategy justified by the statistical results of the previous section. We assume, guided by our observations, every time bitcoin sees a significant drop in price, all other cryptocurrencies see significant drops in turn. \begin{strategy}[Bitcoin drops]
+We now present a trading strategy justified by the statistical results of the previous section. We assume, guided by our observations, every time Bitcoin sees a significant drop in price, all other cryptocurrencies see significant drops in turn. \begin{strategy}[Bitcoin drops]
 Whenever Bitcoin experiences a significant drop in price, we buy Ethereum, and sell in the next time period that follows.
 \end{strategy} 
-Note that this strategy assumes an immediate recovery of the price once one observation sees a significant drop. This assumption is based on experience but is nevertheless a substantial simplification; indeed, once the price drops, more significant drops can occur immediately afterwards. To go further in our analysis, one may wish to consider Moving Average recovery and price retracement strategies. In Figure (\ref{fig:backtested_strategy_2}) we display the PnL ('Profit-and-Loss') of our strategy, versus a simple buy-and-hold strategy. 
+Note that this strategy is built on the pricnicple that more of than not,  Ethereum experiences an immediate recovery of the price once one observation sees a significant drop. However, it is entriely possible that once the price drops significantly, even more significant drops can occur immediately afterwards. To go further in our analysis, one may wish to consider moving average recovery and price retracement strategies [ref]. In Figure (\ref{fig:backtested_strategy_2}) we display the PnL ('Profit-and-Loss') of our strategy, versus a simple buy-and-hold strategy. 
 
 \begin{figure}[!htbp]
     \centering
@@ -740,18 +732,12 @@ Note that this strategy assumes an immediate recovery of the price once one obse
 
 
 \section{Machine Learning Approach}
-Machine learning (ML) is a type of artificial intelligence (AI) that build models to become more accurate at predicting outcomes without being explicitly programmed to do so. Machine learning algorithms use historical data as input to predict new output values. Recently, machine learning performs nicely in various predication tasks in various areas. One simple idea is to use techniques in machine learning to predict the price of cryptocurrency and earn extra money from it.
+Machine learning (ML) is a type of artificial intelligence (AI) that build models to become more accurate at predicting outcomes without being explicitly programmed to do so. Machine learning algorithms use historical data as input to predict new output values. Recently, machine learning performs nicely in various predication tasks in various areas. One simple idea is to use techniques in machine learning to predict the price of cryptocurrencies.
 
-\subsection{Evaluation}
+\subsection{Performance evaluation}
 Before we dive into the details of implementation, we need to define a way of giving a numerical score to the the performance of our models. We will use the Root Mean Square Error (RMSE) statistic
-
-\[
-\textrm{RMSE} =\sqrt{\frac{\sum_{i=1}^{N}\|y(i)-\hat{y}(i)\|^{2}}{N}},
-\]
-
-where $N$ is the number of data points, $y(i)$ is the i-th measurement of actual data, and $\hat{y}(i)$ is its corresponding prediction.\\
-
-In machine learning, it is extremely helpful to have a single number to judge a model’s performance, whether it be during training, cross-validation, or monitoring after deployment. Root mean square error is one of the most widely used measures for this. It is a proper scoring rule that is intuitive to understand and compatible with some of the most common statistical assumptions. \cite{hyndman2006another} This statistic measures the Euclidean distance between our prediction and our model, the aim is to get this figure as low as possible, offering an analogy to correctness.  
+\[\textrm{RMSE} =\sqrt{\frac{\sum_{i=1}^{N}\|y(i)-\hat{y}(i)\|^{2}}{N}},\] where $N$ is the number of data points, $y(i)$ is the i-th measurement of actual data, and $\hat{y}(i)$ is its corresponding prediction.\\
+In machine learning, it is extremely helpful to have a single number to judge a model’s performance, whether it be during training, cross-validation, or monitoring after deployment. Root mean square error is one of the most widely used measures for this. It is a proper scoring rule that is intuitive to understand and compatible with some of the most common statistical assumptions \cite{hyndman2006another}. This statistic measures the Euclidean distance between our prediction and our model, the aim is to get this figure as low as possible, offering an analogy to correctness.  
 
 For the remaining part, the data set we used to train the model is the Kyber Network trading data. but here the data is more granular, here we use 1 hour trading data in lieu of 1 day data to train the model and test the accuracy of our model. Moreover, we keep only two features: \code{Date} and \code{close} (log of close price in an hour). Please see section (\ref{sec:medium}) for the implementation details.
 
@@ -824,15 +810,12 @@ After obtaining the model we train, we do the same processing for the testing da
     \label{fig:LSTM price}
 \end{figure}
 
-
-
-
 When is predicting is over, it's time to develop a strategy. The strategy is direct and simple: if we predict that price at next hour is higher, then we buy the KNC. If our model predict that the price at next hour is lower, then we sell the price right now.
-Figure \ref{fig:LSTM PNL} for the relaisation of our backtesting. It can be seen that our strategy works nicely and outperform the baseline in the long run in our testing dataset. 
-\begin{figure}[!htbp]
+Figure \ref{fig:LSTM PNL} for the realisation of our backtesting. It can be seen that our strategy works nicely and outperforms the baseline in the long run in our testing dataset. Indeed, based on the historical data we are using, our model is most accurate only during a short period of time which coincides with time indices (hours) 1500-2000. Compare this with much earlier in the data set where the prediction gives a significant underestimate. In period predicted with greater accuracy, our strategy is able to earn much money. But in the other time, our model is not much better, performs similar to the market. Overall, our strategy gives us a higher return.
+\begin{figure}[!ht]
     \centering
     \includegraphics[scale = 0.7]{Images/LSTM PNL.png}
-    \caption{PNL evolution of our strategy and baseline. It can be seen that at beginning , our strategy perform worse than the baseline. However, our strategy performs much better during the oscillation of the KNC price.An explaination is that our model only works for small amount of data (see in fig (\ref{fig:LSTM price}) data index 0-200 and 1500-2000). In these period, our strategy is able to earn much money. But in the other time, our model is not much better, performs similar to the market. In the end, our strategy gives us a higher return }
+    \caption{PNL evolution of our strategy and baseline. It can be seen that at beginning , our strategy perform worse than the baseline. However, our strategy performs much better during the oscillation of the KNC price.}
     \label{fig:LSTM PNL}
 \end{figure}
 
