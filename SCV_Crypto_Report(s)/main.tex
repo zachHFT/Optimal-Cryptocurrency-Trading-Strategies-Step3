@@ -1,4 +1,4 @@
-\documentclass[twoside]{report}
+g\documentclass[twoside]{report}
 \usepackage[utf8]{inputenc}
 %\usepackage[english]{babel}
 \usepackage{amsthm}
@@ -711,14 +711,14 @@ The intuition behind Granger causality is simple. Granger causality is related t
 Next, the autoregression is augmented by including lagged values of $x$:
 \[y_t = a_0 + a_1y_{t-1} + a_2y_{t-2} + \cdots + a_my_{t-m} + b_px_{t-p} + \cdots + b_qx_{t-q} + \text{error}_t.\]
 
-Now, via a statistical $F$-test, one tests the individual significance of each of the coefficients $b_i$ in the above regression statement. In the notation of the above augmented regression, $p$ and $q$ are the shortest and longest lag length respectively for which the lagged value of $x$ is significant. We say $x$ \textbf{Granger causes} $y$ upon rejection of the hypothesis \[
+Now, via a statistical $F$-test, one tests the individual significance of each of the coefficients $b_i$ in the above regression statement. In the notation of the above augmented regression, $p$ and $q$ are the shortest and longest lag length respectively for which the lagged value of $x$ is significant. We say $x$ \textbf{Granger-causes} $y$ upon rejection of the hypothesis \[
 H_0: b_p = \cdots = b_q = 0. 
 \]
 In other words, if the series $y$ is better explained by including values from series $x$, then we conclude $x$ Granger causes $y$. 
 In general, Granger causality has some limitations, in that does not provide any insight on the relationship between the variable hence it is not true causality unlike \textit{cause and effect} analysis. What is more, Granger causality fails to forecast when there is an interdependency between two or more variables, and Granger causality test must be performed on stationary data [ref ].
 
-\subsubsection{Do Bitcoin prices Granger cause Ethereum prices?}
-Before proceeding in answering this question, we must ensure that the data we use meet the requirements of the Granger causality test, in that the data are stationary. As we discussion in the introduction, data extracted from online exchanges gives absolute prices of a currency at a given time, and like traditional financial time series, this is famously non-stationary. To overcome this, we make the log return transformation \[
+\subsubsection{Do Bitcoin prices Granger-cause Ethereum prices?}
+Before proceeding in answering this question, we must ensure that the data we use meet the requirements of the Granger causality test, in that the data are stationary. As we discussion in the introduction, data extracted from online exchanges gives absolute prices of a currency at a given time, and like traditional financial time series, this is famously non-stationary. To overcome this, we make the log-return transformation \[
 \log\left(\frac{P_t}{P_{t-1}}\right) 
 \]
 where $P_t$ is the close price at time $t$ of a given quantity. This transformation does not mask our interpretation of the results since, by a standard first order Taylor approximation \[
@@ -763,7 +763,18 @@ To conclude, the results verify our intuition. Indeed, Bitcoin prices Granger-ca
 
 \subsection{Strategy based on Bitcoin influence}
 
-...
+In this section we offer to investigate the following: We assume, from our observation, that every time bitcoin sees a significant drops in price, all other cryptocurrencies see important drops in turns. We consider this as a buy signal, and assume an immediate recovery of the price (therefore selling in the next time period that follows). Note that this later assumption is certainly not correct and indeed, once the price drops, and more significant drops can occur right after. To go further in our analysis, one may wish to consider Moving Average recovery and price retracement strategies.
+\\
+So far, we display below the PnL ('Profit-and-Loss') of our strategy, versus a simple buy-and-hold strategy. 
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Causality_between_time_series/backtested_strategy_2.png}
+    \caption{Evolution of the PnL of our strategy. We observe consistent increase in our PnL eventhough it is hardly as profitable as a simple buy-and-hold strategy.}
+    \label{fig:backtested_strategy_2}
+\end{figure}
+
+
 
 \section{Machine Learning}
 Machine learning (ML) is a type of artificial intelligence (AI) that build models to become more accurate at predicting outcomes without being explicitly programmed to do so. Machine learning algorithms use historical data as input to predict new output values. Recently, machine learning performs nicely in various predication tasks in various areas. One simple idea is to use techniques in machine learning to predict the price of cryptocurrency and earn extra money from it.
@@ -783,14 +794,11 @@ For the remaining part, the data set we used to train the model is the Kyber Net
 
 \subsection{LSTM}
 
-A simple understanding is to think of this model as human brain. A human receive millions of information everyday, but most of these information are forgot shortly. These memory are called short term memory. On the other hand, there are still some important knowledge we keep in mind for a long time, which are known as long term memory. Inspired by this idea, LSTM is a neural network that throw away "less important" data and memorize "more important" data. The following paragraphs show the exact definition and implementation of LSTM model.
+Consider the human brain. Humans receive millions of information everyday, but most of these data are soon forgotten; what remained in this period of time is stored in \textit{short term memory}. On the other hand, we retain some knowledge for a longer period of time, stored in long term memory. Inspired by this idea, we will employ neural network model which throws away "less important" data and memorises "more important" data. We call such a model a \textbf{Long Short Term Memory} model, often abbreviated to LSTM.
+% Unlike standard feedforward neural networks, LSTM has feedback connections.
+More precisely, LSTM is an artificial recurrent neural network (RNN) architecture used in the field of deep learning. It can process not only single data points (such as images), but also entire sequences of data (such as speech or video). For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, speech recognition and anomaly detection in network traffic or intrusion detection systems.\cite{greff2016lstm}
 
-Long short-term memory, abbreviated to LSTM, is an artificial recurrent neural network (RNN) architecture used in the field of deep learning. Unlike standard feedforward neural networks, LSTM has feedback connections. It can process not only single data points (such as images), but also entire sequences of data (such as speech or video). For example, LSTM is applicable to tasks such as unsegmented, connected handwriting recognition, speech recognition and anomaly detection in network traffic or IDSs (intrusion detection systems).\cite{greff2016lstm}
-
-
-A common LSTM unit is composed of a cell, an input gate, an output gate and a forget gate. The cell remembers values over arbitrary time intervals and the three gates regulate the flow of information into and out of the cell.
-
-LSTM networks are well-suited to classifying, processing and making predictions based on time series data, since there can be lags of unknown duration between important events in a time series. LSTMs were developed to deal with the vanishing gradient problem that can be encountered when training traditional RNNs. Relative insensitivity to gap length is an advantage of LSTM over RNNs, hidden Markov models and other sequence learning methods in numerous applications. See Figure \ref{fig:LSTM} for a schematic.
+LSTM networks are well-suited to classifying, processing and making predictions based on time series data, since there can be lags of unknown duration between important events in a time series. LSTMs were developed to deal with the vanishing gradient problem that can be encountered when training traditional RNNs. Relative insensitivity to gap length is an advantage of LSTM over RNNs, hidden Markov models and other sequence learning methods in numerous applications. In practice, a common LSTM unit is composed of a \textit{cell}, an input gate, an output gate and a forget gate. The cell remembers values over arbitrary time intervals and the three gates regulate the flow of information into and out of the cell, see Figure \ref{fig:LSTM} for a schematic.
 
 \begin{figure}[!htbp]
     \centering
@@ -799,26 +807,36 @@ LSTM networks are well-suited to classifying, processing and making predictions 
     \label{fig:LSTM}
 \end{figure}
 
-In accordance with the figure, and the literature, let us define some notation
-$$
-\begin{aligned}
-&x_{t} \in \mathbb{R}^{d}: \text { input vector to the LSTM unit } \\
-&f_{t} \in(0,1)^{h}: \text { forget gate's activation vector } \\
-&i_{t} \in(0,1)^{h}: \text { input/update gate's activation vector } \\
-&o_{t} \in(0,1)^{h}: \text { output gate's activation vector } \\
-&h_{t} \in(-1,1)^{h}: \text { hidden state vector also known as output vector of the LSTM unit } \\
-&\tilde{c}_{t} \in(-1,1)^{h}: \text { cell input activation vector } \\
-&c_{t} \in \mathbb{R}^{h}: \text { cell state vector } \\
-&W \in \mathbb{R}^{h \times d}, U \in \mathbb{R}^{h \times h} \text { and } b \in \mathbb{R}^{h}: \text { weight matrices and bias vector parameters which need to be learned during training }\\
-&\sigma_{g} :\text{ sigmoid function}\\
-&\sigma_{c} :\text{ hyperbolic tangent function}\\
-&\sigma_{h} :\text{ hyperbolic tangent function or  $\sigma_{h}(x)=x$.}
-\end{aligned}
-$$
 
-where the superscripts $d$ and $h$ refer to the number of input features and number of hidden units, respectively. Then, we have that
 
-$$
+In accordance with the Figure (\ref{fig:LSTM}), and the literature, in Table (\ref{tab:feature}) we define some of the features used in the model.
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{rr}
+    \hline 
+    \textbf{Feature} & \textbf{Description} \\
+    \hline
+    $ x_{t} \in \mathbb{R}^{d}$ & Input vector to the LSTM unit\\
+    $f_{t} \in(0,1)^{h}$ & Forget gate's activation vector\\
+    $i_{t} \in(0,1)^{h}$ & Input/update gate's activation vector\\
+    $o_{t} \in(0,1)^{h}$ & Output gate's activation vector\\
+    $h_{t} \in(-1,1)^{h}$ & Hidden state vector also known as output vector of the LSTM unit\\
+    $\tilde{c}_{t} \in(-1,1)^{h}$ & Cell input activation vector\\ 
+    $c_{t} \in \mathbb{R}^{h}$ & Cell state vector\\
+    $W \in \mathbb{R}^{h \times d}$ & Weight matrices that needed to be trained\\
+    $U \in \mathbb{R}^{h \times h}$ & Another weight matrices that needed to be trained \\
+    $b \in \mathbb{R}^{h}$ & Bias vector parameters \\
+    $\sigma_{g}$ & Sigmoid function \\
+    $\sigma_{c}$ & Hyperbolic tangent function \\
+    $\sigma_{h}$ & Hyperbolic tangent function or  $\sigma_{h}(x)=x$\\
+    \hline 
+    \end{tabular} \vspace{-0.2mm}
+    \caption{Summary of the features from our final data frame. The superscripts $d$ and $h$ refer to the number of input features and number of hidden units, respectively The only feature that is obtained via the function of other features is \code{opcl}. This is an important feature for developing strategies.}
+    \label{tab:my_label}
+\end{table}
+
+We define 
+\[
 \begin{aligned}
 f_{t} &=\sigma_{g}\left(W_{f} x_{t}+U_{f} h_{t-1}+b_{f}\right) \\
 i_{t} &=\sigma_{g}\left(W_{i} x_{t}+U_{i} h_{t-1}+b_{i}\right) \\
@@ -827,9 +845,8 @@ o_{t} &=\sigma_{g}\left(W_{o} x_{t}+U_{o} h_{t-1}+b_{o}\right) \\
 c_{t} &=f_{t} \circ c_{t-1}+i_{t} \circ \tilde{c}_{t} \\
 h_{t} &=o_{t} \circ \sigma_{h}\left(c_{t}\right)
 \end{aligned}
-$$
-
-where the initial values are  $c_{0}=0$  and $h_{0}=0$  and the operator o denotes the Hadamard product (element-wise) product. The subscript  t indexes the time step. 
+\]
+where the initial values are $c_{0}=0$ and $h_{0}=0$ and the operator o denotes the Hadamard product (element-wise) product. The subscript $t$ indexes the time step. For readers that are interested in this technique, we recommend you the book from Greff \cite{greff2016lstm}.
 
 \subsubsection{Strategy and backtesting}
 In this part, we describe the strategy we use to increase the profit via LSTM model. At first, we split the one hour trading data into two parts. The first 80 percent of data is used as training dataset, while the rest 20 percent data are used as testing test. For a certain data, we use the previous 60 data as input and that certain data as output. Then we use LSTM with 60 units and some tuned hyperparameters to train the model.
@@ -848,11 +865,11 @@ After obtaining the model we train, we do the same processing for the testing da
 
 
 When is predicting is over, it's time to develop a strategy. The strategy is direct and simple: if we predict that price at next hour is higher, then we buy the KNC. If our model predict that the price at next hour is lower, then we sell the price right now.
-Figure \ref{fig:LSTM PNL} for the relaisation of our backtesting. It can be seen that our strategy works nicely and outperform the baseline in the long run in our testing set. 
+Figure \ref{fig:LSTM PNL} for the relaisation of our backtesting. It can be seen that our strategy works nicely and outperform the baseline in the long run in our testing dataset. 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[scale = 0.7]{Images/LSTM PNL.png}
-    \caption{PNL evolution of our strategy and baseline. It can be seen that at beginning , our strategy perform worse than the baseline. However, our strategy performs much better during the oscillation of the KNC price. }
+    \caption{PNL evolution of our strategy and baseline. It can be seen that at beginning , our strategy perform worse than the baseline. However, our strategy performs much better during the oscillation of the KNC price.An explaination is that our model only works for small amount of data (see in fig (\ref{fig:LSTM price}) data index 0-200 and 1500-2000). In these period, our strategy is able to earn much money. But in the other time, our model is not much better, performs similar to the market. In the end, our strategy gives us a higher return }
     \label{fig:LSTM PNL}
 \end{figure}
 
