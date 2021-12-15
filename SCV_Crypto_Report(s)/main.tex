@@ -171,7 +171,7 @@ Before starting our analysis, the reader should know that, unlike stock markets,
 The data extracted from Binance's API -- using Python to access it -- will contain price data at various time points and intervals for a chosen cryptocurrency. We remark that that we have never encountered any NA values or other seemingly out-of-place values that would need to be rejected. Indeed, so called 'out-of-place values' or any other outliers kind of value are strong indicators which require further investigations and may be relevant to dedicated algorithmic trading strategies. We absolutely do not want to remove them as we may be tempted to do in some other contexts in data science.\\
 
 From time to time, one might find missing time periods in the extracted data. Fo example, every once in a while there is a major crash in cryptocurrencies market (i.e. prices dropping significantly). This leads to a massive amount of people trying to connect to the cryptocurrencies exchange platforms to try to sell (or buy) some cryptocurrencies.This often results in the exchange becoming unavailable, their server not being able to handle so many connections attempts at once. This explains the missing data in historical cryptocurrencies prices data (It can be for a couple of minutes up to a couple of hours). We therefore compute the time difference in days and time difference in minutes between pairs of consectives rows of data to spot any such discrepancies in the timestamp and add these to the data set. For example, in a 1-hour dataset we expect that time difference between line i and line i-1 to be 60 min, if, say, it appears to be 57 minutes, we know there was a crash that occured and therefore can decide our strategy testing programme to not consider (i.e. to pause) this very particular time period. It is a useful method to rigoursly proceed to strategy testing algorithm. 
-Although, for the purposes of statistical analysis this discrepancy can be problematic. One way to circumvent this issue is to \textbf{impute} the time series, and there are software packages available to do this. For example, in section \ref{reddit} on Reddit networks, an R package called \code{imputeTS} is used to do this, with the function \code{na\_kalman} which replaces \code{NA} values in the dataset using nearby values by Kalman Smoothing [ref]. This method is one of the most recommended in the package [ref],
+Although, for the purposes of statistical analysis this discrepancy can be problematic. One way to circumvent this issue is to \textbf{impute} the time series, and there are software packages available to do this. For example, in section \ref{reddit} on Reddit networks, an R package called \code{imputeTS} is used to do this, with the function \code{na\_kalman} which replaces \code{NA} values in the dataset using nearby values by Kalman Smoothing \cite{KalmanFilter}. This method is one of the most recommended in the package.
 
 \begin{figure}[H]
     \centering
@@ -392,7 +392,7 @@ As we know, many cryptocurrencies are run by companies or individuals. They main
 
 
 \subsection{Data Preprocessing}
-Let us explain how we access the data from Medium and the changes of cryptocurrency price. For Medium publications, we use webscraping techniques via some Python libraries (\code{BeautifulSoup4 , request} and \code{selenium}) [ref]. At first, we use \code{request} to acquire the source code of the website from \url{https://medium.com/@kyberteam}. This allows us to access the information via Python. Using the library \code{selenium}, we are able to acquire the full information of the source code. After that, we use functions in the library \code{BeautifulSoup4} to parse the whole source code. By doing so, we can deal with this HTML information much easier with Python. With the \code{find\_all} function, we can find all information that interests us in each article. In our case, we think the update time of the article and the title of the article might be helpful for developing strategies. Therefore, using techniques we just introduced, we have a dataframe that contains the update time (denoted as \code{date}) and title for all of the medium articles (denoted as \code{title}) from Kyber.
+Let us explain how we access the data from Medium and the changes of cryptocurrency price. For Medium publications, we use webscraping techniques via some Python libraries (\code{BeautifulSoup4 , request} and \code{selenium}). At first, we use \code{request} to acquire the source code of the website from \url{https://medium.com/@kyberteam}. This allows us to access the information via Python. Using the library \code{selenium}, we are able to acquire the full information of the source code. After that, we use functions in the library \code{BeautifulSoup4} to parse the whole source code. By doing so, we can deal with this HTML information much easier with Python. With the \code{find\_all} function, we can find all information that interests us in each article. In our case, we think the update time of the article and the title of the article might be helpful for developing strategies. Therefore, using techniques we just introduced, we have a dataframe that contains the update time (denoted as \code{date}) and title for all of the medium articles (denoted as \code{title}) from Kyber.
 Upon closer inspection, we found that Kyber do not update their Medium account everyday. We guess updating an article or not is a good signal in developing strategies. So we make a new feature called \code{signal}. It is a binary variable, and the entry is given value 1 if Kyber posted on that day on Medium and 0 otherwise.  For the \code{title}, we want to apply sentiment analysis used in Twitter and keyword checking (To see if it contain certain keyword like 'announcement') at first. However, as a big company based in Asia, Kyber published a large amount of articles that not in English. As a result, it is not easy to do the analysis based on these different languages.  
 
 We merge price data obtained from Binance with the dataframe containing information from Medium. After choosing relevant information, we have some features that are listed in the Table \ref{tab:feature}. As the Kyber begun to trade on Binance on 12 June 2020, the data we select are between 12 June 2020 and 16 November 2021, to give a current dataset. 
@@ -545,7 +545,7 @@ We now use the ideas presented in section \ref{sec:redditSN} to identify the mos
 
 
 
-To study and visualise the graph, we explored the R packages \code{igraph} (the cousin of \code{networkX} in R), \code{ggraph}, \code{visNetwork}, \code{graphlayouts} extensively. Moreover, a very recent development in the field of network science has constructed the centrality measure, \textbf{Integrated Value of Influence} (IVI), which uses various statistical tests to compare various centrality measures for a graph to determine the most influential nodes [ref]. Fortunately, the authors of that paper have created a comprehensive R package called \code{influential} whose function \code{ivi} does the heavy lifting for us [ref]. This function will calculate the various centrality measures for us, compute the IVI for each node, which is scaled to lie between $0$ and $100$. To explore our results, please visit our Rshiny application \textbf{\url{https://kcvis.shinyapps.io/network_analysis/}} to play around interactively with the network formed and discover properties of its nodes. 
+To study and visualise the graph, we explored the R packages \code{igraph} (the cousin of \code{networkX} in R), \code{ggraph}, \code{visNetwork}, \code{graphlayouts} extensively. Moreover, a very recent development in the field of network science has constructed the centrality measure, \textbf{Integrated Value of Influence} (IVI), which uses various statistical tests to compare various centrality measures for a graph to determine the most influential nodes \cite{IVIpatterns}. Fortunately, the authors of that paper have created a comprehensive R package called \code{influential} whose function \code{ivi} does the heavy lifting for us \cite{IVIvignette}. This function will calculate the various centrality measures for us, compute the IVI for each node, which is scaled to lie between $0$ and $100$. To explore our results, please visit our Rshiny application \textbf{\url{https://kcvis.shinyapps.io/network_analysis/}} to play around interactively with the network formed and discover properties of its nodes. 
 
 
 
@@ -656,7 +656,7 @@ This analysis is of course limited. For example, we didn't consider the content 
 
 \chapter{Prediction Based Methods}
 \section{Causality between time series}
-Bitcoin is the most popular and most traded cryptocurrency on the market right now [ref]. We have seen that, both superficially and subjectively, whenever Bitcoin prices against the US dollar drop (or spike) suddenly, that other cryptocurrencies tend to follow in suit. For the purposes of trading on the market, the word 'follow' is important here -- can we make decisions in buy-sell strategies of other cryptocurrencies using knowledge of Bitcoin's price trajectory in the very recent past? 
+Bitcoin is the most popular and most traded cryptocurrency on the market right now \cite{popularCryptos}. We have seen that, both superficially and subjectively, whenever Bitcoin prices against the US dollar drop (or spike) suddenly, that other cryptocurrencies tend to follow in suit. For the purposes of trading on the market, the word 'follow' is important here -- can we make decisions in buy-sell strategies of other cryptocurrencies using knowledge of Bitcoin's price trajectory in the very recent past? 
 
 However, we must first assess whether there is any credibility to our superficial observation. To this end, we will discuss \textbf{Granger causality} and its eponymous statistical hypothesis test. A result which corroborates our initial observation would strongly inform a trading strategy which is based on Bitcoin's influence on other coins. 
 \subsection{Granger Causality}
@@ -669,7 +669,7 @@ Now, via a statistical $F$-test, one tests the individual significance of each o
 H_0: b_p = \cdots = b_q = 0. 
 \]
 In other words, if the series $y$ is better explained by including values from series $x$, then we conclude $x$ Granger causes $y$. 
-In general, Granger causality has some limitations, in that does not provide any insight on the relationship between the variable hence it is not true causality unlike \textit{cause and effect} analysis. What is more, Granger causality fails to forecast when there is an interdependency between two or more variables, and Granger causality test must be performed on stationary data [ref ].
+In general, Granger causality has some limitations, in that does not provide any insight on the relationship between the variable hence it is not true causality unlike \textit{cause and effect} analysis. What is more, Granger causality fails to forecast when there is an interdependency between two or more variables, and Granger causality test must be performed on stationary data \cite{GrangerCausality}.
 
 \subsubsection{Do Bitcoin prices Granger-cause Ethereum prices?}
 Before proceeding in answering this question, we must ensure that the data we use meet the requirements of the Granger causality test, in that the data are stationary. As we discussion in the introduction, data extracted from online exchanges gives absolute prices of a currency at a given time, and like traditional financial time series, this is famously non-stationary. To overcome this, we make the log-return transformation \[
@@ -680,7 +680,7 @@ where $P_t$ is the close price at time $t$ of a given quantity. This transformat
 \]
 which is just a percentage return.
 
-Obtaining the price data as described in the introduction, and using the \code{acf} function (see Figure \ref{fig:acf_btc_eth} in base R and \code{adf.test} function in the R package \code{tseries}, we are able to convince ourselves that the Bitcoin and Ethereum series are stationary. Indeed, for both series, the \code{adf.test} function, which performs the Augmented Dickey-Fuller Test whose null hypothesis says the series is non-stationary [ref] -- we obtained $p$-values less than $1\%$, and so reject this null hypothesis. 
+Obtaining the price data as described in the introduction, and using the \code{acf} function (see Figure \ref{fig:acf_btc_eth} in base R and \code{adf.test} function in the R package \code{tseries}, we are able to convince ourselves that the Bitcoin and Ethereum series are stationary. Indeed, for both series, the \code{adf.test} function, which performs the Augmented Dickey-Fuller Test whose null hypothesis says the series is non-stationary \cite{adftest} -- we obtained $p$-values less than $1\%$, and so reject this null hypothesis. 
 
 \begin{figure}[!htbp]
     \centering
@@ -720,7 +720,7 @@ To conclude, the results verify our intuition. Indeed, Bitcoin prices Granger-ca
 We now present a trading strategy justified by the statistical results of the previous section. We assume, guided by our observations, every time Bitcoin sees a significant drop in price, all other cryptocurrencies see significant drops in turn. \begin{strategy}[Bitcoin drops]
 Whenever Bitcoin experiences a significant drop in price, we buy Ethereum, and sell in the next time period that follows.
 \end{strategy} 
-Note that this strategy is built on the pricnicple that more of than not,  Ethereum experiences an immediate recovery of the price once one observation sees a significant drop. However, it is entriely possible that once the price drops significantly, even more significant drops can occur immediately afterwards. To go further in our analysis, one may wish to consider moving average recovery and price retracement strategies [ref]. In Figure (\ref{fig:backtested_strategy_2}) we display the PnL ('Profit-and-Loss') of our strategy, versus a simple buy-and-hold strategy. 
+Note that this strategy is built on the pricnicple that more of than not,  Ethereum experiences an immediate recovery of the price once one observation sees a significant drop. However, it is entriely possible that once the price drops significantly, even more significant drops can occur immediately afterwards. To go further in our analysis, one may wish to consider moving average recovery and price retracement strategies. In Figure (\ref{fig:backtested_strategy_2}) we display the PnL ('Profit-and-Loss') of our strategy, versus a simple buy-and-hold strategy. 
 
 \begin{figure}[!htbp]
     \centering
@@ -795,7 +795,7 @@ c_{t} &=f_{t} \circ c_{t-1}+i_{t} \circ \tilde{c}_{t} \\
 h_{t} &=o_{t} \circ \sigma_{h}\left(c_{t}\right)
 \end{aligned}
 \]
-where the initial values are $c_{0}=0$ and $h_{0}=0$ and the operator o denotes the Hadamard product (element-wise) product. The subscript $t$ indexes the time step. For readers that are interested in this technique, we recommend you the book from Greff \cite{greff2016lstm}.
+where the initial values are $c_{0}=0$ and $h_{0}=0$ and the operator o denotes the Hadamard product (element-wise) product. The subscript $t$ indexes the time step. For readers that are interested in this technique, we recommend a book written by Greff on the topic \cite{greff2016lstm}.
 
 \subsubsection{Strategy and backtesting}
 In this part, we describe the strategy we use to increase the profit via LSTM model. At first, we split the one hour trading data into two parts. The first 80 percent of data is used as training dataset, while the rest 20 percent data are used as testing test. For a certain data, we use the previous 60 data as input and that certain data as output. Then we use LSTM with 60 units and some tuned hyperparameters to train the model.
@@ -871,7 +871,7 @@ Figure \ref{fig:LSTM PNL} for the realisation of our backtesting. It can be seen
 
 
 \bibliographystyle{vancouver}
-\bibliography{references}
+\bibliography{SCV_Crypto_Report(s)/references}
 
 
 \end{spacing}
